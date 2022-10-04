@@ -1,7 +1,7 @@
 #Modèle principal contenant les musiques et les playlists de l'app
 class Library :
 
-    #Composé d'éléments Music
+    #Composé de tous les éléments Music de l'app
     music_list = []
 
     #Composé d'éléments Tracks
