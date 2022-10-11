@@ -63,7 +63,24 @@ class Playlist :
                 print("Cette musique n'est pas présente dans votre librairie.")
 
     # Retirer une musique de la playlist
-    def remove_music(playlist_name, index):
+    def remove_music(self, playlist_name, music):
+        if not os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
+            print(playlist_name+" n'éxiste pas.")
+        else:
+            try:
+                with open(PLAYLIST_PATH+"\\"+playlist_name+".txt", 'r') as fr:
+                    lines = fr.readlines()
+                    with open(PLAYLIST_PATH+"\\"+playlist_name+".txt", 'w') as fw:
+                        for line in lines:
+                            if line == music.get_title():
+                                music_name = line
+                                fw.write(line)
+                print(music_name+" a été retirée.")
+            except:
+                print("Oops! something error")
+                
+    # Retirer une musique de la playlist avec l'index dans la playlist
+    def remove_music_by_index(self, playlist_name, index):
         if not os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
             print(playlist_name+" n'éxiste pas.")
         else:
@@ -80,3 +97,10 @@ class Playlist :
                 print(music_name+" a été retirée.")
             except:
                 print("Oops! something error")
+
+    # Retrouver une musique dans la librairie avec son titre
+    def find_music_by_name(self, name):
+        music_list_library = Library.get_music_list()
+        for music in music_list_library:
+            if(music.get_title() == name):
+                return music

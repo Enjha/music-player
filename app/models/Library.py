@@ -87,10 +87,13 @@ class Library :
             music_space.delete("anchor")
             #Suppression de la musique dans le dossier songs
             os.remove(LIBRARY_PATH+"/"+ name)
-            #Suppression de la musique dans la liste des musiques de l'objet librairie
+            #Suppression de la musique dans la liste des musiques de l'objet
             for music in self.get_music_list():
                 if(music.get_title() == name):
                     self.get_playlist_list().remove(music)         
+            for playlist in self.get_playlist_list():
+                for music in playlist.music_list:
+                    if(music.get_title() == name):
+                        playlist.remove_music(playlist, name)
         else:
             ctypes.windll.user32.MessageBoxW(0, name +" n'existe pas.", "Attention", 1)
-           
