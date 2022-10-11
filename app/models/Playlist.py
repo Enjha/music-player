@@ -33,6 +33,13 @@ def create(name):
         file.close()
     else:
         print(name+" existe déja.")
+
+def delete(name):
+    if os.path.isfile(PLAYLIST_PATH+"\\"+name+".txt"):
+        os.remove(PLAYLIST_PATH+"\\"+name+".txt")
+        print(name+" a été supprimée.")
+    else:
+        print(name+" n'existe pas.")
   
 def add_musics(playlist_name, music_name):
     if not os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
@@ -46,7 +53,34 @@ def add_musics(playlist_name, music_name):
         else:
             print("Cette musique n'est pas présente dans votre librairie.")
 
-#create('playlist_1')
-add_musics('playlist_1','Avicii - The Nights.mp3')
+def remove_musics(playlist_name, line_number):
+    music_name = ""
+    if not os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
+        print(playlist_name+" n'éxiste pas.")
+    else:
+        try:
+            with open(PLAYLIST_PATH+"\\"+playlist_name+".txt", 'r') as fr:
+                lines = fr.readlines()
+                ptr = 1
+                with open(PLAYLIST_PATH+"\\"+playlist_name+".txt", 'w') as fw:
+                    for line in lines:
+                        if ptr != line_number:
+                            music_name = line
+                            fw.write(line)
+                        ptr += 1
+            print(music_name+" a été retirée.")
+        except:
+            print("Oops! something error")
+
+def play_playist(name):
+    music_list = getMusics(name)
+    #play(music_list)    
+
+
+create('playlist_1')
+#delete('playlist_1')
+#add_musics('playlist_1','Avicii - The Nights')
+#add_musics('playlist_1','Cry Baby- Tokyo Revengers')
+#remove_musics('playlist_1', 2)
 print(getMusics('playlist_1'))
 print(getPlaylists())
