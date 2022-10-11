@@ -79,3 +79,10 @@ class Library :
                 music = self.create_music_by_name(song_rename)
                 music_space.insert(END,music.get_title())
                 
+    def delete_music(self, music_space): 
+        music_space.delete("anchor")
+        text=music_space.get("anchor")
+        if(os.path.exists(path+"/"+ text) == False):
+                ctypes.windll.user32.MessageBoxW(0, text +" n'existe pas.", "Attention", 1)
+        else:
+            os.remove(path+"/"+ text)

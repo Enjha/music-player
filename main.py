@@ -26,14 +26,20 @@ def main():
     music_path = "ressources\\songs"
     pattern = "*.mp3" 
 
+
+    supp_button = Button(window, text="🗑️ Supprimer", bg='red',borderwidth=0, command=lambda : library.delete_music(music_space))
+    supp_button.pack( side='top',anchor='e', pady=10, padx=20)
+    
     music_space = Listbox(window, fg="black", bg="grey", width=100,font=('helvetica',18))
-    music_space.pack(padx=18, pady=18)
+    music_space.pack(padx=18, pady=18, fill=BOTH, expand=1)
           
     space = Label(window, text="Boutons space",bg='#5DC863', fg='black', font=('poppin',22))
     space.pack(pady=150)          
 
     import_button = Button(window, text="Importer des musiques", bg="grey", fg="black", command=lambda : library.import_music(music_space))
     import_button.pack(pady=5, padx=25, side=RIGHT)
+    
+
     
     #scroll_music = Scrollbar(window)
     #scroll_music.config(command=music_space.yview)
@@ -42,8 +48,7 @@ def main():
 
     for music in music_list: 
         music_space.insert('end', music.get_title()) 
-
-    
+        
     buttons = Frame(window, bg='grey')
     buttons.pack(padx=10, pady=5,anchor='center') 
     
