@@ -1,17 +1,10 @@
+import pygame
+
 from ast import main
 from fileinput import filename
 from tkinter import *
 from app.models.Library import *
 from app.models.Music import *
-
-import os 
-import shutil
-import fnmatch
-from tkinter import filedialog
-import pygame
-from pygame import mixer
-import ctypes  # An included library with Python install.   
-
 
 def main():
     
