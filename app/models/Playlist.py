@@ -30,7 +30,6 @@ class Playlist :
             file = open(PLAYLIST_PATH+"\\"+self.title+".txt",'w')
             file.close()
             print("Création de la playlist "+self.title)
-            self.title = self.title
             return True
         else:
             print(self.title+" existe déja.")
@@ -102,4 +101,4 @@ class Playlist :
         music_list_library = library.get_music_list()
         for music in music_list_library:
             if(music.get_title() == name):
-                return music  
+                return music

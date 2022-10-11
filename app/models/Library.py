@@ -5,7 +5,8 @@ import ctypes
 
 from tkinter import *
 from tkinter import filedialog
-from app.models.Music import *
+#from app.models.Music import *
+from Music import *
 from mutagen.mp3 import MP3
 
 # Classe permettant la gestion des musiques dans la librairie
