@@ -30,6 +30,7 @@ def main():
     window.maxsize(600,750)
     window.minsize(600,750)
 
+    music_path = "ressources\\songs"
     pattern = "*.mp3" 
 
     music_space = Listbox(window, fg="black", bg="grey", width=100,font=('helvetica',18))
