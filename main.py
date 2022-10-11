@@ -146,25 +146,9 @@ def main():
     next_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
         
     '''
- 
-    
-    def forget(widget):
-  
-        # This will remove the widget from toplevel
-        # basically widget do not get deleted
-        # it just becomes invisible and loses its position
-        # and can be retrieve
-        widget.grid_forget()
-  
-    # method to make widget visible
-    def retrieve(widget):
-        widget.grid(row = 0, column = 0, ipady = 10, pady = 10, padx = 5)
-        
-    
     scroll_music = Scrollbar(window)
     scroll_music.config(command=music_space.yview)
     scroll_music.pack(side=RIGHT, fill=Y)
-
     '''
     
     # Affichage de la fenêtre créée :
