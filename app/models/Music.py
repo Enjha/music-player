@@ -20,3 +20,4 @@ class Music :
 
     def get_path(self):
         return self.path
+    

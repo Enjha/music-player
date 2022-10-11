@@ -17,11 +17,11 @@ def main():
     window.title("Spotizer")
     window.iconbitmap("ressources\\icons\\logo.ico")
     window.anchor(CENTER)
-    window.geometry("600x750")
+    window.geometry("1000x800")
     window.resizable(False,False)
     window.config(bg='#5DC863')
 
-    window.maxsize(600,750)
+    window.maxsize(1500,1500)
     window.minsize(600,750)
 
     music_path = "ressources\\songs"
@@ -31,7 +31,7 @@ def main():
         prev_song = music_space.curselection()
         prev_song = prev_song[0]-1
         prev_song_name = music_space.get(prev_song)
-        space.config(text= prev_song_name)
+        music_title.config(text= prev_song_name)
         mixer.music.load(music_path + "\\" + prev_song_name + ".mp3")
         mixer.music.play()
         music_space.select_clear(0, 'end')
@@ -43,7 +43,7 @@ def main():
         music_space.select_clear('active')
           
     def play_music():
-        space.config(text=music_space.get("anchor"))
+        music_title.config(text=music_space.get("anchor"))
         #mixer.music.load(music_space.get(ACTIVE) + ".mp3")
         mixer.music.load(music_path + "\\" + music_space.get("anchor") + ".mp3")
         mixer.music.play()
@@ -61,7 +61,7 @@ def main():
         next_song = music_space.curselection()
         next_song = next_song[0]+1
         next_song_name = music_space.get(next_song)
-        space.config(text= next_song_name)
+        music_title.config(text= next_song_name)
         mixer.music.load(music_path + "\\" + next_song_name + ".mp3")
         mixer.music.play()
         music_space.select_clear(0, 'end')
@@ -77,27 +77,39 @@ def main():
                 if song.endswith(".mp3"):
                     music_space(END, song) 
          
-    import_button = Button(window, text="Importer des musiques", bg="grey", fg="black", command=import_music)
-    import_button.pack(pady=5, padx=25, side=RIGHT)
- 
-    music_space = Listbox(window, fg="black", bg="grey", width=100,font=('helvetica',18))
-    music_space.pack(padx=18, pady=18)
+    top_buttons = Frame(window, width=900, height=50, bg="blue")
+    top_buttons.grid(row=0, column=0,padx=1, pady=1)
     
-    scroll_music = Scrollbar(window)
-    scroll_music.config(command=music_space.yview)
-    scroll_music.pack(side=RIGHT, fill=Y)
-
+    blank_zone_import = Frame(top_buttons, width=750, bg="white")
+    blank_zone_import.grid(row=0, column=0,padx=1, pady=1)
+    import_zone = Frame(top_buttons, width=100, bg="purple")
+    import_zone.grid(row=0, column=1,padx=1, pady=1)
+    
+    import_button = Button(import_zone, text="Importer des musiques", bg="grey", fg="black", command=import_music)
+    import_button.pack(pady=5, padx=25)
+    
+    
+    
+    musics_frame = Frame(window, width=900, height=500, bg="red")
+    musics_frame.grid(row=1, column=0,padx=1, pady=1)
+    
+    music_space = Listbox(musics_frame, fg="black",width=70,height=20, bg="grey",font=('helvetica',18))
+    music_space.pack(padx=16, pady=16)
+    
     for root, dirs, files, in os.walk(music_path):
         for filename in fnmatch.filter(files, pattern):
             final_name = filename.strip('.mp3')
             music_space.insert('end', final_name)
-
-
-
-    space = Label(window, text="Boutons space",bg='#5DC863', fg='black', font=('poppin',22))
-    space.pack(pady=15)
     
-    buttons = Frame(window, bg='grey')
+    
+    label_zone = Frame(window, width=900, height=20, bg="white")
+    label_zone.grid(row=3, column=0,padx=1, pady=1)
+    music_title = Label(label_zone, text="Boutons space",bg='#5DC863', fg='black', font=('poppin',22))
+    music_title.pack(pady=15)
+    
+    player_zone = Frame(window, width=900, height=70, bg="blue")
+    player_zone.grid(row=4, column=0,padx=1, pady=1)
+    buttons = Frame(player_zone, bg='grey')
     buttons.pack(padx=10, pady=5,anchor='center') 
     
     prev_icon = PhotoImage(file="ressources\\icons\\prev.png")
@@ -119,17 +131,17 @@ def main():
     next_icon = PhotoImage(file="ressources\\icons\\next.png")
     next_button = Button(window, text="next", image=next_icon, bg='grey',borderwidth=0, command=next_music)
     next_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
-
-
-    space2 = Label(window, text="nav space",bg='#5DC863', fg='black', font=('grey',22))
-    space2.pack(pady=15)
     
-    nav = Frame(window, bg='white')
-    nav.pack(padx=10, pady=5,anchor='center')
+    '''     
+    
+    scroll_music = Scrollbar(window)
+    scroll_music.config(command=music_space.yview)
+    scroll_music.pack(side=RIGHT, fill=Y)
+
+    '''
+    
     # Affichage de la fenêtre créée :
     window.mainloop()
-
-    print("Tout fonctionne correctement")
 
 
 if __name__ == "__main__":
