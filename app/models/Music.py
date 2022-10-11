@@ -1,6 +1,6 @@
 from tkinter import *
-from app.models.Library import *
-
+#from app.models.Library import *
+from Library import *
 from pygame import mixer
 
 #Classe permettant la gestion des musiques lors de la lecture
