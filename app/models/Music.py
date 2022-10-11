@@ -8,6 +8,19 @@ from pygame import mixer
 
 #Classe permettant la gestion des musiques lors de la lecture
 class Music :
+    title = ""
+    duration = 0
+
+    def __init__(self, title, duration):
+        self.title = title
+        self.duration = duration
+
+    def get_title(self):
+        return self.title
+    
+    def get_duration(self):
+        return self.duration
+
     #Méthode permettant de jouer une musique
     def play_music(music_path, music_space, space):
         space.config(text=music_space.get("anchor"))

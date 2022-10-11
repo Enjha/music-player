@@ -18,6 +18,8 @@ def main():
     window = Tk()
     pygame.mixer.init()
     
+    library = Library()
+    
     # Ajout d'un titre à la fenêtre principale :
     window.title("Spotizer")
     window.iconbitmap("ressources\\icons\\logo.ico")
@@ -28,7 +30,6 @@ def main():
     window.maxsize(600,750)
     window.minsize(600,750)
 
-    music_path = "ressources\\songs"
     pattern = "*.mp3" 
 
     music_space = Listbox(window, fg="black", bg="grey", width=100,font=('helvetica',18))
@@ -37,17 +38,16 @@ def main():
     space = Label(window, text="Boutons space",bg='#5DC863', fg='black', font=('poppin',22))
     space.pack(pady=150)          
 
-    import_button = Button(window, text="Importer des musiques", bg="grey", fg="black", command=lambda : Library.import_music(music_path, music_space))
+    import_button = Button(window, text="Importer des musiques", bg="grey", fg="black", command=lambda : library.import_music(music_space))
     import_button.pack(pady=5, padx=25, side=RIGHT)
     
     #scroll_music = Scrollbar(window)
     #scroll_music.config(command=music_space.yview)
     #scroll_music.pack(side=RIGHT, fill=Y)
+    music_list = library.get_music_list()
 
-    for root, dirs, files, in os.walk(music_path):
-        for filename in fnmatch.filter(files, pattern):
-            final_name = filename.strip('.mp3')
-            music_space.insert('end', final_name)
+    for music in music_list: 
+        music_space.insert('end', music.get_title()) 
 
     
     buttons = Frame(window, bg='grey')
