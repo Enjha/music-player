@@ -1,86 +1,82 @@
-#Modèle playlist représentant une playlist -> liste de musique séléctionnées
-import os
+from app.models.Library import *
 
-PLAYLIST_PATH = "resources\playlists"
-LIBRAIRIE_PATH = "resources\songs"
+# Modèle playlist représentant une playlist
+class Playlist :
 
-def getPlaylists():
-    playlists = []
-    dir_list = os.listdir(PLAYLIST_PATH)
-    for file in dir_list:
-        playlists.append(file)
-    return playlists
+    # Chemin pointant les playlists
+    global PLAYLIST_PATH
+    PLAYLIST_PATH = "resources\playlists"
 
-def getMusics(playlist_name):
-    if os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
-        musics = []
-        file = open(PLAYLIST_PATH+"\\"+playlist_name+".txt", "r")
+    title = ""          # Titre de la playlsit
+    music_list = []     # Liste des musiques de la playlist
+
+    # Constructeur
+    def __init__(self, title, music_list):
+        self.title = title
+        self.music_list = music_list
+
+    # Initialise les liste de musiques et de playlists en allant chercher directemment dans les fichiers/dossiers.
+    def init_music_list(self):
+        file = open(PLAYLIST_PATH+"\\"+self.title+".txt", "r")
         line = file.readline()
         while line:
-            line = file.readline()
             music = line.replace("\n", "")
-            if music != '':
-                musics.append(music)
+            self.music_list.append(music)
+            line = file.readline()               
         file.close()
-        return musics
-    else:
-        print("Cette playlist n'existe pas.")
 
-def create(name):
-    if not os.path.isfile(PLAYLIST_PATH+"\\"+name+".txt"):
-        print("Création de la playlist "+name)
-        file = open(PLAYLIST_PATH+"\\"+name+".txt",'w')
-        file.close()
-    else:
-        print(name+" existe déja.")
-
-def delete(name):
-    if os.path.isfile(PLAYLIST_PATH+"\\"+name+".txt"):
-        os.remove(PLAYLIST_PATH+"\\"+name+".txt")
-        print(name+" a été supprimée.")
-    else:
-        print(name+" n'existe pas.")
-  
-def add_musics(playlist_name, music_name):
-    if not os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
-        print(playlist_name+" n'éxiste pas.")
-    else:
-        if not os.path.isfile(LIBRAIRIE_PATH+"\\"+music_name):
-            playlist_file = open(PLAYLIST_PATH+"\\"+playlist_name+".txt",'a')
-            playlist_file.write(music_name+'\n')
-            playlist_file.close()
-            print(music_name+" ajouté à "+playlist_name)
+    # Créer une playlist avec un titre
+    def create(self, title):
+        if not os.path.isfile(PLAYLIST_PATH+"\\"+title+".txt"):
+            file = open(PLAYLIST_PATH+"\\"+title+".txt",'w')
+            file.close()
+            print("Création de la playlist "+title)
+            self.title = title
+            return True
         else:
-            print("Cette musique n'est pas présente dans votre librairie.")
+            print(title+" existe déja.")
+            return False
 
-def remove_musics(playlist_name, line_number):
-    music_name = ""
-    if not os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
-        print(playlist_name+" n'éxiste pas.")
-    else:
-        try:
-            with open(PLAYLIST_PATH+"\\"+playlist_name+".txt", 'r') as fr:
-                lines = fr.readlines()
-                ptr = 1
-                with open(PLAYLIST_PATH+"\\"+playlist_name+".txt", 'w') as fw:
-                    for line in lines:
-                        if ptr != line_number:
-                            music_name = line
-                            fw.write(line)
-                        ptr += 1
-            print(music_name+" a été retirée.")
-        except:
-            print("Oops! something error")
+    # Supprimer une playlist 
+    def delete(self, title):
+        if os.path.isfile(PLAYLIST_PATH+"\\"+title+".txt"):
+            os.remove(PLAYLIST_PATH+"\\"+title+".txt")
+            del self
+            print ("La playlist "+title+" a été supprimée.")
+            return True
+        else:
+            print(title+" n'existe pas.")
+            return False
+    
+    # Ajouter une musique a la playlist
+    def add_music(self, playlist_name, music):
+        if not os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
+            print(playlist_name+" n'éxiste pas.")
+        else:
+            if Library.is_music_exist(music.get_title()):
+                playlist_file = open(PLAYLIST_PATH+"\\"+playlist_name+".txt",'a')
+                playlist_file.write(music.get_title()+'\n')
+                playlist_file.close()
+                print(music.get_title()+" ajouté à "+playlist_name)
+                self.music_list.append(music)
+            else:
+                print("Cette musique n'est pas présente dans votre librairie.")
 
-def play_playist(name):
-    music_list = getMusics(name)
-    #play(music_list)    
-
-
-create('playlist_1')
-#delete('playlist_1')
-#add_musics('playlist_1','Avicii - The Nights')
-#add_musics('playlist_1','Cry Baby- Tokyo Revengers')
-#remove_musics('playlist_1', 2)
-print(getMusics('playlist_1'))
-print(getPlaylists())
+    # Retirer une musique de la playlist
+    def remove_music(playlist_name, index):
+        if not os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
+            print(playlist_name+" n'éxiste pas.")
+        else:
+            try:
+                with open(PLAYLIST_PATH+"\\"+playlist_name+".txt", 'r') as fr:
+                    lines = fr.readlines()
+                    ptr = 1
+                    with open(PLAYLIST_PATH+"\\"+playlist_name+".txt", 'w') as fw:
+                        for line in lines:
+                            if ptr != index:
+                                music_name = line
+                                fw.write(line)
+                            ptr += 1
+                print(music_name+" a été retirée.")
+            except:
+                print("Oops! something error")

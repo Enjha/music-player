@@ -54,7 +54,7 @@ def main():
     buttons.pack(padx=10, pady=5,anchor='center') 
     
     prev_icon = PhotoImage(file="ressources\\icons\\prev.png")
-    prev_button = Button(window, text="prev", image=prev_icon, bg='grey',borderwidth=0, command=lambda : Music.prev_music(music_path, music_space, space))
+    prev_button = Button(window, text="prev", image=prev_icon, bg='grey',borderwidth=0, command=lambda : Music.prev_music(music_space, space))
     prev_button.pack(padx=8, pady=10, in_=buttons, side=LEFT)
     
     stop_icon = PhotoImage(file="ressources\\icons\\stop.png")
@@ -62,7 +62,7 @@ def main():
     stop_button.pack(padx=8, pady=15, in_=buttons,side=LEFT)
     
     play_icon = PhotoImage(file="ressources\\icons\\play.png")
-    play_button = Button(window, text="play", image=play_icon, bg='grey',borderwidth=0, command=lambda : Music.play_music(music_path, music_space, space))
+    play_button = Button(window, text="play", image=play_icon, bg='grey',borderwidth=0, command=lambda : Music.play_music(music_space, space))
     play_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
     
     pause_icon = PhotoImage(file="ressources\\icons\\pause.png")
@@ -70,7 +70,7 @@ def main():
     pause_button.pack(padx=8, pady=15, in_=buttons,side=LEFT)
     
     next_icon = PhotoImage(file="ressources\\icons\\next.png")
-    next_button = Button(window, text="next", image=next_icon, bg='grey',borderwidth=0, command=lambda : Music.next_music(music_path, music_space, space))
+    next_button = Button(window, text="next", image=next_icon, bg='grey',borderwidth=0, command=lambda : Music.next_music(music_space, space))
     next_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
 
 
@@ -81,8 +81,6 @@ def main():
     nav.pack(padx=10, pady=5,anchor='center')
     # Affichage de la fenêtre créée :
     window.mainloop()
-
-    print("Tout fonctionne correctement")
 
 
 if __name__ == "__main__":
