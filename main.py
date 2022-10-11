@@ -1,4 +1,5 @@
 from ast import main
+from cProfile import label
 from fileinput import filename
 from tkinter import *
 import os
@@ -68,6 +69,16 @@ def main():
         music_space.activate(next_song)
         music_space.select_set(next_song)
     
+    def on_click(event):
+        play_music()
+        retrieve_player()
+    
+    def forget_player():
+        player_zone.grid_forget()
+    
+    def retrieve_player():
+        player_zone.grid(row=0, column=0,padx=1, pady=1)
+        
     def import_music():
         path_import = filedialog.askdirectory();
         if path_import:
@@ -85,7 +96,7 @@ def main():
     import_zone = Frame(top_buttons, width=100, bg="purple")
     import_zone.grid(row=0, column=1,padx=1, pady=1)
     
-    import_button = Button(import_zone, text="Importer des musiques", bg="grey", fg="black", command=import_music)
+    import_button = Button(import_zone, text="Importer des musiques", bg="grey", fg="black", command=retrieve_player)
     import_button.pack(pady=5, padx=25)
     
     
@@ -95,6 +106,7 @@ def main():
     
     music_space = Listbox(musics_frame, fg="black",width=70,height=20, bg="grey",font=('helvetica',18))
     music_space.pack(padx=16, pady=16)
+    music_space.bind("<Button>", on_click)
     
     for root, dirs, files, in os.walk(music_path):
         for filename in fnmatch.filter(files, pattern):
@@ -107,11 +119,12 @@ def main():
     music_title = Label(label_zone, text="Boutons space",bg='#5DC863', fg='black', font=('poppin',22))
     music_title.pack(pady=15)
     
-    player_zone = Frame(window, width=900, height=70, bg="blue")
-    player_zone.grid(row=4, column=0,padx=1, pady=1)
+    bottom_player = Frame(window, width=900, height=70, bg="blue")
+    bottom_player.grid(row=4, column=0,padx=1, pady=1)
+    player_zone = Frame(bottom_player, width=900, height=70, bg="purple")
     buttons = Frame(player_zone, bg='grey')
     buttons.pack(padx=10, pady=5,anchor='center') 
-    
+        
     prev_icon = PhotoImage(file="ressources\\icons\\prev.png")
     prev_button = Button(window, text="prev", image=prev_icon, bg='grey',borderwidth=0, command=prev_music)
     prev_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
@@ -131,8 +144,22 @@ def main():
     next_icon = PhotoImage(file="ressources\\icons\\next.png")
     next_button = Button(window, text="next", image=next_icon, bg='grey',borderwidth=0, command=next_music)
     next_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
+        
+    '''
+ 
     
-    '''     
+    def forget(widget):
+  
+        # This will remove the widget from toplevel
+        # basically widget do not get deleted
+        # it just becomes invisible and loses its position
+        # and can be retrieve
+        widget.grid_forget()
+  
+    # method to make widget visible
+    def retrieve(widget):
+        widget.grid(row = 0, column = 0, ipady = 10, pady = 10, padx = 5)
+        
     
     scroll_music = Scrollbar(window)
     scroll_music.config(command=music_space.yview)
