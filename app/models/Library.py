@@ -13,7 +13,7 @@ class Library :
 
     # Chemin pour les fichiers/dossiers de musiques et playlists.
     global LIBRARY_PATH, PLAYLISTS_PATH
-    LIBRARY_PATH = "ressources\songs"
+    LIBRARY_PATH = "ressources/songs"
     PLAYLISTS_PATH = "resources\playlists"
 
     # Liste de playlists et musiques.
@@ -78,11 +78,19 @@ class Library :
                 shutil.copy(song, LIBRARY_PATH)    
                 music = self.create_music_by_name(song_rename)
                 music_space.insert(END,music.get_title())
-                
+    
+    # Méthode de suppression d'une musique présente dans la librairie  
     def delete_music(self, music_space): 
-        music_space.delete("anchor")
-        text=music_space.get("anchor")
-        if(os.path.exists(path+"/"+ text) == False):
-                ctypes.windll.user32.MessageBoxW(0, text +" n'existe pas.", "Attention", 1)
+        name=music_space.get("anchor")+".mp3"
+        if(os.path.exists(LIBRARY_PATH+"/"+ name)):
+            #Suppression de la musique sur l'affichage
+            music_space.delete("anchor")
+            #Suppression de la musique dans le dossier songs
+            os.remove(LIBRARY_PATH+"/"+ name)
+            #Suppression de la musique dans la liste des musiques de l'objet librairie
+            for music in self.get_music_list():
+                if(music.get_title() == name):
+                    self.get_playlist_list().remove(music)         
         else:
-            os.remove(path+"/"+ text)
+            ctypes.windll.user32.MessageBoxW(0, name +" n'existe pas.", "Attention", 1)
+           
