@@ -2,8 +2,8 @@ import pygame
 
 from tkinter import *
 import tkinter.font as font
-from app.models.Library import *
-from app.models.Music import *
+from app.models.library import *
+from app.models.music import *
 
 class Player: 
     def main_window():
@@ -25,41 +25,26 @@ class Player:
 
         music_list = library.get_music_list()
         f = font.Font(size=20)
-
-        def play():
-            Music.play_music(music_space, music_title)
-            on_click_if_music_on()
-        
-        def on_click_if_music_on():
+       
+        def on_click(event):
+            library.play_music(music_space, music_title)
+            retrieve_player()
+            
+        def forget_player():
+            player_zone.grid_forget()
+            library.stop_music(music_space)
+            supp_zone.grid_forget()
+            music_title.config(text="Pour reprendre l'écoute, cliquez sur une musique.")
+            
+        def retrieve_player():
+            supp_zone.grid()
+            player_zone.grid()   
             prev_button.pack(in_=buttons, side=LEFT)
             pause_button.pack(in_=buttons,side=LEFT)
             next_button.pack(in_=buttons, side=LEFT)
             stop_button.pack(in_=buttons, side=LEFT)
             play_button["text"] = "🔁"
             play_button.pack(padx=8, pady=15,in_=buttons, side=LEFT)
-        
-        def on_click(event):
-            if(mixer.music.get_busy() == True):
-                on_click_if_music_on()
-            else:
-                retrieve_player()
-        
-        def forget_player():
-            player_zone.grid_forget()
-            Music.stop_music(music_space)
-            supp_zone.grid_forget()
-            music_title.config(text="Vous avez arrêté votre écoute...")
-            
-        def retrieve_player():
-            supp_zone.grid()
-            player_zone.grid()   
-            pause_button.pack_forget()
-            stop_button.pack_forget()
-            prev_button.pack_forget()
-            play_button.pack(in_=buttons,side=LEFT)
-            play_button["text"] = "▶️"
-            next_button.pack_forget()
-            music_title.config(text="")
             supp_zone.grid(row=0, column=2)
             
         top_buttons = Frame(window, width=900, height=50, bg="black")
@@ -91,7 +76,7 @@ class Player:
         
         label_zone = Frame(window, width=900, height=20, bg="black")
         label_zone.grid(row=3, column=0,padx=1, pady=1)
-        music_title = Label(label_zone, text="",bg='black', fg='white', font=('poppin',22))
+        music_title = Label(label_zone, text="Veuillez choisir une musique.",bg='black', fg='white', font=('poppin',22))
         music_title.pack(pady=15)
         
         bottom_player = Frame(window, width=1000, height=70, bg="black")
@@ -100,7 +85,7 @@ class Player:
         buttons = Frame(player_zone, bg='black')
         buttons.pack(padx=10, pady=5,anchor='center') 
         
-        prev_button = Button(window, text="⏮", bg='black', fg='white',borderwidth=0, command=lambda : Music.prev_music(music_space, music_title))
+        prev_button = Button(window, text="⏮", bg='black', fg='white',borderwidth=0, command=lambda : library.prev_music(music_space, music_title))
         prev_button.pack(padx=8, pady=10, in_=buttons, side=LEFT)
         prev_button['font'] = f    
         
@@ -108,15 +93,15 @@ class Player:
         stop_button.pack(padx=8, pady=15, in_=buttons,side=RIGHT)
         stop_button['font'] = f 
         
-        play_button = Button(window, text="▶️", bg='black', fg='white',borderwidth=0, command=lambda : play())
+        play_button = Button(window, text="▶️", bg='black', fg='white',borderwidth=0, command=lambda : library.play_music(music_space, music_title))
         play_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
         play_button['font'] = f 
         
-        pause_button = Button(window, text="⏸", bg='black', fg='white',borderwidth=0, command=lambda : Music.pause_music(pause_button))
+        pause_button = Button(window, text="⏸", bg='black', fg='white',borderwidth=0, command=lambda : library.pause_music(pause_button))
         pause_button.pack(padx=8, pady=15, in_=buttons,side=LEFT)
         pause_button['font'] = f 
         
-        next_button = Button(window, text="⏭", bg='black', fg='white',borderwidth=0, command=lambda : Music.next_music(music_space, music_title))
+        next_button = Button(window, text="⏭", bg='black', fg='white',borderwidth=0, command=lambda : library.next_music(music_space, music_title))
         next_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
         next_button['font'] = f        
         
