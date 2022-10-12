@@ -24,6 +24,13 @@ class Playlist :
             line = file.readline()               
         file.close()
 
+    #Getter sur le title et la liste des musiques
+    def get_title(self):
+        return self.title   
+
+    def get_music_list(self):
+        return self.music_list
+
     # Créer une playlist avec un titre
     def create(self):
         if not os.path.isfile(PLAYLIST_PATH+"\\"+self.title+".txt"):
