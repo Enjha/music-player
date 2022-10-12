@@ -14,7 +14,7 @@ class Library :
     # Chemin pour les fichiers/dossiers de musiques et playlists.
     global LIBRARY_PATH, PLAYLISTS_PATH
     LIBRARY_PATH = "ressources/songs"
-    PLAYLISTS_PATH = "resources\playlists"
+    PLAYLISTS_PATH = "ressources/playlists"
 
     # Liste de playlists et musiques.
     playlist_list = []

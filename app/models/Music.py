@@ -83,12 +83,12 @@ class Music :
 
     # Méthode permettant de mettre en pause la musique courante
     def pause_music(pause_button):
-        if(pause_button["text"]== "pause"):
+        if(pause_button["text"]== "⏸"):
             mixer.music.pause()
-            pause_button["text"] = "play"
+            pause_button["text"] = "▶️"
         else:
             mixer.music.unpause()
-            pause_button["text"]= "pause"
+            pause_button["text"]= "⏸"
 
     # Méthode permettant d'arrêter la lecture d'une quelconque musique
     def stop_music(music_space):
