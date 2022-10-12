@@ -98,26 +98,26 @@ def main():
     bottom_player = Frame(window, width=1000, height=70, bg="black")
     bottom_player.grid(row=4, column=0)
     player_zone = Frame(bottom_player, width=1000, height=70, bg="black")
-    buttons = Frame(player_zone, bg='grey')
+    buttons = Frame(player_zone, bg='black')
     buttons.pack(padx=10, pady=5,anchor='center') 
     
-    prev_button = Button(window, text="⏮", bg='grey',borderwidth=0, command=lambda : Music.prev_music(music_space, music_title))
+    prev_button = Button(window, text="⏮", bg='black', fg='white',borderwidth=0, command=lambda : Music.prev_music(music_space, music_title))
     prev_button.pack(padx=8, pady=10, in_=buttons, side=LEFT)
     prev_button['font'] = f    
     
-    stop_button = Button(window, text="⏹", bg='grey',borderwidth=0, command=lambda : forget_player())
+    stop_button = Button(window, text="⏹", bg='black', fg='white',borderwidth=0, command=lambda : forget_player())
     stop_button.pack(padx=8, pady=15, in_=buttons,side=RIGHT)
     stop_button['font'] = f 
     
-    play_button = Button(window, text="▶️", bg='grey',borderwidth=0, command=lambda : play())
+    play_button = Button(window, text="▶️", bg='black', fg='white',borderwidth=0, command=lambda : play())
     play_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
     play_button['font'] = f 
     
-    pause_button = Button(window, text="⏸", bg='grey',borderwidth=0, command=lambda : Music.pause_music(pause_button))
+    pause_button = Button(window, text="⏸", bg='black', fg='white',borderwidth=0, command=lambda : Music.pause_music(pause_button))
     pause_button.pack(padx=8, pady=15, in_=buttons,side=LEFT)
     pause_button['font'] = f 
     
-    next_button = Button(window, text="⏭", bg='grey',borderwidth=0, command=lambda : Music.next_music(music_space, music_title))
+    next_button = Button(window, text="⏭", bg='black', fg='white',borderwidth=0, command=lambda : Music.next_music(music_space, music_title))
     next_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
     next_button['font'] = f        
     
