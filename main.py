@@ -25,22 +25,25 @@ def main():
     window.minsize(600,750)
 
     music_list = library.get_music_list()
-    
     f = font.Font(size=20)
 
     def play():
         Music.play_music(music_space, music_title)
-       #play_button.pack_forget()
+        on_click_if_music_on()
+    
+    def on_click_if_music_on():
         prev_button.pack(in_=buttons, side=LEFT)
         pause_button.pack(in_=buttons,side=LEFT)
         next_button.pack(in_=buttons, side=LEFT)
         stop_button.pack(in_=buttons, side=LEFT)
         play_button["text"] = "🔁"
         play_button.pack(padx=8, pady=15,in_=buttons, side=LEFT)
-        
+    
     def on_click(event):
-        #Music.play_music(music_space, music_title)
-        retrieve_player()
+        if(mixer.music.get_busy() == True):
+            on_click_if_music_on()
+        else:
+            retrieve_player()
     
     def forget_player():
         player_zone.grid_forget()
@@ -53,13 +56,13 @@ def main():
         player_zone.grid()   
         pause_button.pack_forget()
         stop_button.pack_forget()
-        prev_button.pack(in_=buttons, side=LEFT)
+        prev_button.pack_forget()
         play_button.pack(in_=buttons,side=LEFT)
         play_button["text"] = "▶️"
-        next_button.pack(in_=buttons, side=LEFT)
+        next_button.pack_forget()
+        music_title.config(text="")
         supp_zone.grid(row=0, column=2)
         
-    
     top_buttons = Frame(window, width=900, height=50, bg="black")
     top_buttons.grid(row=0, column=0,padx=1, pady=1)
     
@@ -89,12 +92,12 @@ def main():
     
     label_zone = Frame(window, width=900, height=20, bg="black")
     label_zone.grid(row=3, column=0,padx=1, pady=1)
-    music_title = Label(label_zone, text="Titre de musique ici",bg='#5DC863', fg='black', font=('poppin',22))
+    music_title = Label(label_zone, text="",bg='black', fg='white', font=('poppin',22))
     music_title.pack(pady=15)
     
-    bottom_player = Frame(window, width=1000, height=70, bg="green")
+    bottom_player = Frame(window, width=1000, height=70, bg="black")
     bottom_player.grid(row=4, column=0)
-    player_zone = Frame(bottom_player, width=1000, height=70, bg="purple")
+    player_zone = Frame(bottom_player, width=1000, height=70, bg="black")
     buttons = Frame(player_zone, bg='grey')
     buttons.pack(padx=10, pady=5,anchor='center') 
     

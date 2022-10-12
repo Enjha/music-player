@@ -12,7 +12,8 @@ class Music :
 
     title = "" # titre de la musiques
     duration = 0 # durée de la musiques
-
+    current_music= ""
+    
     # Constructeur
     def __init__(self, title, duration):
         self.title = title
@@ -43,6 +44,7 @@ class Music :
             music_space.select_set(0)
             space.config(text=music_space.get(0))
             song_name = music_space.get(0)
+        
         mixer.music.load(LIBRARY_PATH + "\\" + song_name + ".mp3")
         mixer.music.play()
 
