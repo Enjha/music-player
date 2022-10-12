@@ -1,7 +1,6 @@
 import unittest
 from tkinter import *
 
-
 from app.models.library import Library
 
 library = Library()
@@ -16,15 +15,20 @@ for music in music_list:
 
 
 class MyTestCase(unittest.TestCase):
+
     def test_init_music_list(self):
-        print(music_list)
-        assert len(music_list) == 2
-        assert music_list[2].get_title() == "Demon Slayer - Kimetsu no Yaiba"
+        assert  len(music_list) == 3
+        assert  music_list[0].get_title() == "Avicii - The Nights"
+        assert  music_list[2].get_title() == "Demon Slayer - Kimetsu no Yaiba"
 
     def test_is_music_exist(self):
         assert library.is_music_exist("Avicii - The Nights")
         assert not library.is_music_exist("Bvicii - The Nights")
 
-
-if __name__ == '__main__':
-    unittest.main()
+    def test_delete_music(self):
+        assert library.is_music_exist("Avicii - The Nights")
+        assert  len(music_list) == 3
+        music_space.select_anchor(0)
+        library.delete_music(music_space)
+        assert not library.is_music_exist("Avicii - The Nights")
+        assert  len(music_list) == 2

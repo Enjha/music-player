@@ -6,7 +6,7 @@ class Playlist (object):
 
     # Chemin pointant les playlists
     global PLAYLIST_PATH
-    PLAYLIST_PATH = "resources\playlists"
+    PLAYLIST_PATH = "ressources\playlists"
 
     title = ""          # Titre de la playlsit
     music_list = []     # Liste des musiques de la playlist
