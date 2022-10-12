@@ -107,7 +107,7 @@ class Library (object):
             ctypes.windll.user32.MessageBoxW(0, name +" n'existe pas.", "Attention", 1)
 
     # Méthode permettant de jouer une musique
-    def play_music(self, music_space, space):
+    def play_music(self, music_space, space, pause_button):
         space.config(text=music_space.get("anchor"))
         if (music_space.get("anchor") != ""):
             space.config(text=music_space.get("anchor"))
@@ -118,11 +118,12 @@ class Library (object):
             space.config(text=music_space.get(0))
             song_name = music_space.get(0)
         #Charger la musique et la jouer. 
+        pause_button["text"]= "⏸"
         mixer.music.load(LIBRARY_PATH + "\\" + song_name + ".mp3")
         mixer.music.play()
 
     # Méthode permettant de jouer la musique précédente
-    def prev_music(self, music_space, space):
+    def prev_music(self, music_space, space, pause_button):
         prev_song = music_space.curselection()
         prev_song = prev_song[0]-1
         prev_song_name = music_space.get(prev_song)
@@ -135,10 +136,11 @@ class Library (object):
         mixer.music.load(LIBRARY_PATH + "\\" + prev_song_name + ".mp3")
         mixer.music.play()
         music_space.select_clear(0, 'end')
+        pause_button["text"]= "⏸"
         music_space.activate(prev_song)
         music_space.select_set(prev_song)
     # Méthode permettant de jouer la musique suivante
-    def next_music(self, music_space, space):
+    def next_music(self, music_space, space, pause_button):
         next_song = music_space.curselection()
         next_song = next_song[0]+1
         next_song_name = music_space.get(next_song)
@@ -152,6 +154,7 @@ class Library (object):
         mixer.music.load(LIBRARY_PATH + "\\" + next_song_name + ".mp3")
         mixer.music.play()
         music_space.select_clear(0, 'end')
+        pause_button["text"]= "⏸"
         music_space.activate(next_song)
         music_space.select_set(next_song)
 
