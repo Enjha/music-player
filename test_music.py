@@ -12,8 +12,9 @@ class MyTestCase(unittest.TestCase):
         audio_info = audio.info
         duration = int(audio_info.length)
         music = Music("Demon Slayer - Kimetsu no Yaiba.mp3".replace(".mp3", "").replace("tests/ressources/songs/", ""), duration, library)
-        print(music.get_title + "dfhhfdgrds")
-        assert music.get_duration == duration
+        assert music.get_title() == "Demon Slayer - Kimetsu no Yaiba"
+
+        assert music.get_duration() == duration
 
 
 if __name__ == '__main__':

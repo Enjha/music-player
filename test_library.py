@@ -2,11 +2,11 @@ import unittest
 from tkinter import *
 import shutil
 
-
 from app.models.library import Library
 from app.models.music import Music
 
 LIBRARY_PATH = "ressources/songs"
+
 
 
 library = Library()
@@ -21,8 +21,6 @@ for music in music_list:
 
 
 class MyTestCase(unittest.TestCase):
-
-
     def test_a_init_music_list(self):
         assert  len(music_list) == 3
         assert  music_list[0].get_title() == "Cry Baby- Tokyo Revengers"

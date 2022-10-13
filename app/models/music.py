@@ -1,6 +1,5 @@
 
 from tkinter import *
-from app.models.library import *
 
 #Classe permettant la gestion des musiques lors de la lecture
 class Music (object):

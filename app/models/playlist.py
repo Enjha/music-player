@@ -51,10 +51,11 @@ class Playlist (object):
     
     # Ajouter une musique a la playlist
     def add_music(self, playlist_name, music):
+        library = Library()
         if not os.path.isfile(PLAYLIST_PATH+"\\"+playlist_name+".txt"):
             print(playlist_name+" n'éxiste pas.")
         else:
-            if Library.is_music_exist(music.get_title()):
+            if library.is_music_exist(music.get_title()):
                 playlist_file = open(PLAYLIST_PATH+"\\"+playlist_name+".txt",'a')
                 playlist_file.write(music.get_title()+'\n')
                 playlist_file.close()
