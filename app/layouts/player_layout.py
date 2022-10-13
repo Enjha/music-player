@@ -71,7 +71,7 @@ class Player:
         for music in music_list: 
             music_space.insert('end', music.get_title()) 
             
-        music_space.bind("<Button>", on_click)
+        music_space.bind("<Double-Button>", on_click)
         
         
         label_zone = Frame(window, width=900, height=20, bg="#1e272e")

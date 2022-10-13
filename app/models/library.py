@@ -1,3 +1,4 @@
+from glob import glob
 import os 
 import shutil
 import fnmatch
@@ -18,6 +19,7 @@ class Library (object):
     PLAYLISTS_PATH = "ressources/playlists"
 
     # Liste de playlists et musiques.
+    global music_list
     playlist_list = []
     music_list = []
     current_music = ()
@@ -63,7 +65,7 @@ class Library (object):
 
     # Fonction utile.
     def create_music_by_name(self, name):
-        audio = MP3(LIBRARY_PATH+"\\"+name)
+        audio = MP3(LIBRARY_PATH+"/"+name)
         audio_info = audio.info
         duration = int(audio_info.length)
         music = Music(name.replace(".mp3", "") , duration, self)
@@ -75,6 +77,7 @@ class Library (object):
         songs=filedialog.askopenfilenames(initialdir="songs/",title="Importer fichier audio", filetypes=(("mp3 Files","*.mp3"),))
         # Parcourir la selection
         for song in songs:
+            print(song)
             # Recupérer le nom de la musique dans le chemin
             song_split = song.split("/")
             song_rename = song_split[len(song_split)-1]
@@ -85,6 +88,7 @@ class Library (object):
             else:
                 shutil.copy(song, LIBRARY_PATH)    
                 music = self.create_music_by_name(song_rename)
+                music_list.append(song_rename.replace(".mp3",""))
                 music_space.insert(END,music.get_title())
     
     # Méthode de suppression d'une musique présente dans la librairie  

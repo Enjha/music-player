@@ -1,12 +1,19 @@
 import unittest
+from mutagen.mp3 import MP3
 
-
-
+from app.models.library import Library
+from app.models.music import Music
 
 
 class MyTestCase(unittest.TestCase):
-    def test_prev_music(self):
-        assert True == True
+    def test_music(self):
+        audio = MP3("Demon Slayer - Kimetsu no Yaiba.mp3")
+        library = Library()
+        audio_info = audio.info
+        duration = int(audio_info.length)
+        music = Music("Demon Slayer - Kimetsu no Yaiba.mp3".replace(".mp3", "").replace("tests/ressources/songs/", ""), duration, library)
+        print(music.get_title + "dfhhfdgrds")
+        assert music.get_duration == duration
 
 
 if __name__ == '__main__':
