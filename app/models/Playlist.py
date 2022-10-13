@@ -1,4 +1,4 @@
-from app.models.Library import *
+from app.models.library import *
 # Modèle playlist représentant une playlist
 class Playlist :
 

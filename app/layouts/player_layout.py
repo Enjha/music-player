@@ -2,8 +2,8 @@ import pygame
 
 from tkinter import *
 import tkinter.font as font
-from app.models.Library import *
-from app.models.Music import *
+from app.models.library import *
+from app.models.music import *
 
 class Player: 
     def main_window():
@@ -19,7 +19,7 @@ class Player:
         window.anchor(CENTER)
         window.geometry("1000x800")
         window.resizable(False,False)
-        window.config(bg='black')
+        window.config(bg='#1e272e')
         window.maxsize(1500,1500)
         window.minsize(600,750)
 
@@ -80,9 +80,9 @@ class Player:
         musics_frame = Frame(window, width=900, height=500, bg="grey")
         musics_frame.grid(row=1, column=0,padx=1, pady=1)
         
-        music_space = Listbox(musics_frame, fg="black",width=70,height=20, bg="grey",font=('helvetica',18))
+        music_space = Listbox(musics_frame, fg="white",width=70,height=20, bg="#2f3640",font=('helvetica',18), selectbackground="green")
         music_space.pack(padx=16, pady=16)
-        
+
         for music in music_list: 
             music_space.insert('end', music.get_title()) 
             
