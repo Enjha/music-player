@@ -40,28 +40,28 @@ class Library (object):
         for file in dir_list:
             self.playlist_list.append(file)
 
-    # Getter pour les liste de musiques et de playlists.
+    # Getter pour les listes de musiques et de playlists.
     def get_music_list(self):
         return self.music_list
     
     def get_playlist_list(self):
         return self.playlist_list
-    #Getter pour la musique actuellement en écoute. 
+    # Getter pour la musique actuellement en écoute. 
     def get_current_music(self):
         return self.current_music
-    
+    #Setter pour définir la nouvelle musique jouée
     def set_current_music(self, music):
         self.current_music = music
 
 
-    # Vérifie que le titre de la musique est présente dans la librairie.
+    # Vérifie que le titre de la musique est présent dans la librairie
     def is_music_exist(self, name):
         for music in self.music_list:
             if name == music.get_title():
                 return True
         return False
 
-    # Fonction utile.
+    # Créé un musique avec le nom fourni en donnant sa durée
     def create_music_by_name(self, name):
         audio = MP3(LIBRARY_PATH+"\\"+name)
         audio_info = audio.info
@@ -69,7 +69,7 @@ class Library (object):
         music = Music(name.replace(".mp3", "") , duration, self)
         return music
 
-    # Methode d'import de fichier mp3.
+    # Methode d'import de fichier .mp3
     def import_music(self, music_space):
         # Ouvrir la fenêtre de dialogue pour importer des fichier .mp3
         songs=filedialog.askopenfilenames(initialdir="songs/",title="Importer fichier audio", filetypes=(("mp3 Files","*.mp3"),))
@@ -91,11 +91,11 @@ class Library (object):
     def delete_music(self, music_space): 
         name=music_space.get("anchor")+".mp3"
         if(os.path.exists(LIBRARY_PATH+"/"+ name)):
-            #Suppression de la musique sur l'affichage
+            # Suppression de la musique sur l'affichage
             music_space.delete("anchor")
-            #Suppression de la musique dans le dossier songs
+            # Suppression de la musique dans le dossier songs
             os.remove(LIBRARY_PATH+"/"+ name)
-            #Suppression de la musique dans la liste des musiques de l'objet
+            # Suppression de la musique dans la liste des musiques de l'objet
             for music in self.get_music_list():
                 if(music.get_title() == name):
                     self.get_playlist_list().remove(music)         
@@ -104,20 +104,21 @@ class Library (object):
                     if(music.get_title() == name):
                         playlist.remove_music(playlist, name)
         else:
+            # Un pop-up apparaît pour signifier que la musique n'existe pas 
             ctypes.windll.user32.MessageBoxW(0, name +" n'existe pas.", "Attention", 1)
 
     # Méthode permettant de jouer une musique
-    def play_music(self, music_space, space, pause_button):
-        space.config(text=music_space.get("anchor"))
+    def play_music(self, music_space, music_label, pause_button):
+        music_label.config(text=music_space.get("anchor"))
         if (music_space.get("anchor") != ""):
-            space.config(text=music_space.get("anchor"))
+            music_label.config(text=music_space.get("anchor"))
             song_name =music_space.get("anchor")
         else:
-            #Si rien n'est sélectionné, joue la premiere musique
+            # Si rien n'est sélectionné, joue la premiere musique
             music_space.select_set(0)
-            space.config(text=music_space.get(0))
+            music_label.config(text=music_space.get(0))
             song_name = music_space.get(0)
-        #Charger la musique et la jouer. 
+        # Charger la musique et la jouer. 
         pause_button["text"]= "⏸"
         mixer.music.load(LIBRARY_PATH + "\\" + song_name + ".mp3")
         mixer.music.play()
@@ -128,7 +129,7 @@ class Library (object):
         prev_song = prev_song[0]-1
         prev_song_name = music_space.get(prev_song)
         space.config(text= prev_song_name)
-        #En début de liste, lit la dernière musique
+        # En début de liste, lit la dernière musique de la liste
         if (prev_song_name == ""):
             music_space.select_set(music_space.size() - 1)
             prev_song = music_space.size() - 1
@@ -139,13 +140,14 @@ class Library (object):
         pause_button["text"]= "⏸"
         music_space.activate(prev_song)
         music_space.select_set(prev_song)
+        
     # Méthode permettant de jouer la musique suivante
     def next_music(self, music_space, space, pause_button):
         next_song = music_space.curselection()
         next_song = next_song[0]+1
         next_song_name = music_space.get(next_song)
         space.config(text= next_song_name)
-        # En fin de liste, lit la première musique
+        # En fin de liste, lit la première musique de la liste
         if (next_song_name == ""):
             music_space.select_set(0)
             next_song = 0
@@ -172,7 +174,7 @@ class Library (object):
         mixer.music.stop()
         music_space.select_clear('active')
 
-
+    # Méthode pour retrouver un musique par son nom
     def find_music_by_name(self, name):
         for music in self.get_music_list():
             if(music.get_title() == name):
