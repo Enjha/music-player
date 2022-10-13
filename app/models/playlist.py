@@ -1,6 +1,8 @@
-from app.models.library import *
+import os 
+from app.models.library import Library
+
 # Modèle playlist représentant une playlist
-class Playlist :
+class Playlist (object):
 
     # Chemin pointant les playlists
     global PLAYLIST_PATH
