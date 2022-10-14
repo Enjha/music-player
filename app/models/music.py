@@ -1,4 +1,3 @@
-
 from tkinter import *
 from app.models.library import *
 
@@ -30,5 +29,3 @@ class Music (object):
             return True
         else:
             return False
-
-  

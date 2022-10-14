@@ -4,10 +4,13 @@ import pygame
 from tkinter import *
 
 from app.layouts.player_layout import PlayerLayout
+from app.layouts.playlists_layout import PlaylistLayout
+from app.layouts.library_layout import LibraryLayout
+from app.models.library import Library
 
 class MainWindow (tk.Tk): 
     
-    title = ""
+    title = ""  
 
     # Constructeur
     def __init__(self, title):
@@ -27,8 +30,14 @@ class MainWindow (tk.Tk):
         window.maxsize(1500,1500)
         window.minsize(600,750)
 
-        player_layout = PlayerLayout(window)
-        player_layout.print()
+        library = Library()
+
+        player_layout = PlayerLayout(window, library)
+        library_layout = LibraryLayout(window, library)
+        playlists_layout = PlaylistLayout(window, library)
+        #playlists_layout.show()
+        library_layout.show()
+        #player_layout.show()
 
         # Affichage de la fenêtre créée :
         window.mainloop()
