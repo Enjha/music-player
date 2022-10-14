@@ -26,7 +26,7 @@ class PlayerLayout :
         prev_button = Button(player_frame, text="⏮", bg='#141414', fg='white',borderwidth=0, command=lambda : previous_music())
         prev_button.pack(padx=8, pady=10, in_=buttons, side=LEFT)
         prev_button['font'] = font_text_button   
-
+        
         play_pause_button = Button(player_frame, text="⏸", bg='#141414', fg='white',borderwidth=0, command=lambda : play_pause_music())
         play_pause_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
         play_pause_button['font'] = font_text_button   
