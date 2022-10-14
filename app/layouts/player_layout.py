@@ -9,19 +9,20 @@ class PlayerLayout :
         self.window = window
         self.library = library
 
+    #Permet d'afficher le player 
     def show(self):
 
         font_text_button = font.Font(size=20, family=('Comic Sans MS'), weight=font.BOLD)  
-        
+        #Permet de rassembler les boutons du player
         player_frame = Frame(self.window, width=self.window.winfo_width(), height=60, bg="#141414")
         player_frame.pack(side=BOTTOM)
-
+        #Nom de la musique courante à afficher
         music_title = Label(player_frame, text= self.library.get_current_music().get_title() ,bg='#141414', fg='white', font=('poppin',22))
         music_title.pack()
 
         buttons = Frame(player_frame, bg='#141414')
         buttons.pack(anchor='center') 
-        
+        #Différents boutons du player
         prev_button = Button(player_frame, text="⏮", bg='#141414', fg='white',borderwidth=0, command=lambda : previous_music())
         prev_button.pack(padx=8, pady=10, in_=buttons, side=LEFT)
         prev_button['font'] = font_text_button   
@@ -38,6 +39,7 @@ class PlayerLayout :
         back_to_start.pack(padx=8, pady=10, in_=buttons, side=LEFT)
         back_to_start['font'] = font_text_button   
         
+        #Méthode permettant de passer à la musique suivante
         def next_music():
             play_pause_button["text"]= "⏸"
             next_music = self.library.get_next_music(self.library.get_current_music())
@@ -45,7 +47,7 @@ class PlayerLayout :
             self.library.play_music(next_music)
             music_title["text"] = next_music.get_title()
             
-
+        #Méthode permettant de passer à la musique précédente
         def previous_music():
             play_pause_button["text"]= "⏸"
             previous_music = self.library.get_previous_music(self.library.get_current_music())
@@ -53,10 +55,11 @@ class PlayerLayout :
             self.library.play_music(previous_music)
             music_title["text"] = previous_music.get_title()
             
-        
+        #Méthode permettant de recommencer une musique au départ 
         def back_to_start():
             self.library.play_music(self.library.get_current_music())
         
+        #Permet de lire une musique 
         def play_pause_music():
             if(play_pause_button["text"]== "⏸"):
                 pygame.mixer.music.pause()

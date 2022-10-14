@@ -1,8 +1,6 @@
-import tkinter as tk
 from tkinter import font
 from app.models.library import *
 from app.models.playlist import *
-from app.layouts.player_layout import PlayerLayout
 from app.layouts.songs_layout import SongsLayout
 import pygame
 

@@ -75,7 +75,7 @@ class SongsLayout :
         def check_event():
             for event in pygame.event.get():
                 if event.type == MUSIC_END:
-                    next_music()
+                    self.player_layout.next_music()
             self.window.after(100,check_event) 
 
         MUSIC_END = pygame.USEREVENT+1
