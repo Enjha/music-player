@@ -48,7 +48,10 @@ class LibraryLayout :
         musics_frame = Frame(self.window, width= 900, height= 400, bg="#141414")
         musics_frame.pack(padx= (30,30) ,pady=(20,40))
         
-        music_space = Listbox(musics_frame, fg="white",width=70,height=17, bg="#202020",font=('helvetica',18), selectbackground="#4b4b4b", relief=FLAT, selectforeground="white", highlightthickness=0, activestyle=NONE)
+        scrollbar = Scrollbar(musics_frame, orient=VERTICAL)
+        music_space = Listbox(musics_frame, fg="white",width=70,height=15, bg="#2f3542",font=('helvetica',18), selectbackground="#4b4b4b", relief=FLAT, selectforeground="white", highlightthickness=0, activestyle=NONE, yscrollcommand=scrollbar.set)
+        scrollbar.config(command=music_space.yview)
+        scrollbar.pack(side=RIGHT, fill=Y)
         music_space.pack(padx=10, pady=10)
         
         for music in music_list: 
@@ -56,7 +59,6 @@ class LibraryLayout :
             
         music_space.bind("<Double-Button>", on_double_click_music)
         music_space.bind("<Button>", on_click_music)
-        
-        
+         
     def clear(self):
         self.destroy()
