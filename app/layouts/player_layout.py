@@ -19,6 +19,9 @@ class PlayerLayout (Frame):
         library = Library()
         music_list = library.get_music_list()
        
+        global song
+        song = ""
+        
         # Evenement lors d'un clic de souris à un endroit précis
         def on_click_playlist(event):
             pass
@@ -45,7 +48,52 @@ class PlayerLayout (Frame):
             play_button["text"] = "🔁"
             play_button.pack(padx=8, pady=15,in_=buttons, side=LEFT)
     
+        # Actualise le slider et l'affichage du temps écoulé de la musique en cours
+        def play_time():
+            # Si une musqiue n'a pas encore été jouée
+            if(song == ""):
+                song_window = music_space.get(ACTIVE)
+                song = LIBRARY_PATH + "\\" + song_window + ".mp3"
+                current_song = library.find_music_by_name(song)
+            # Si le song courant est différent du song stocké en mémoire alors le modifier et redéfinir le slider et le timer
+            if(song != LIBRARY_PATH + "\\" + music_space.get(ACTIVE) + ".mp3"):
+                status_bar.config(text='')
+                music_slider.config(value=0)
+                song = music_space.get(ACTIVE)
+                song = LIBRARY_PATH + "\\" + song_window + ".mp3"
+                current_song = library.find_music_by_name(song)
+            
+            # Si la musique existe sinon on sort de la fonction
+            if(library.is_music_exist(song)):  
+                
+                # On récupère le temps écoulé de la musique
+                current_time = mixer.music.get_pos() / 1000  
+                converted_current_time = time.strftime('%M:%S', time.gmtime(current_time))
+                # Longueur totale de la musique
+                song_length = current_song.get_duration()
+                converted_song_length = time.strftime('%M:%S', time.gmtime(song_length))
+                # On incrémente le temps écoulé
+                current_time +=1
+                
+                # Si on arrive à la fin de la musique
+                if int(music_slider.get() == int(song_length)):
+                    status_bar.config(text=f'Temps écoulé : {converted_song_length} ')
+                    
+                elif int(music_slider.get()) == int(current_time):
+                    slider_position = int(song_length)
+                    music_slider.config(to=slider_position, value=int(current_time))
+                    
+                else:
+                    slider_position = int(song_length)
+                    music_slider.config(to=slider_position, value=int(music_slider.get()))
+                    converted_current_time = time.strftime('%M:%S', time.gmtime(int(music_slider.get())))
+                    status_bar.config(text=f'Temps écoulé : {converted_current_time}  sur  {converted_song_length} ')
+                    next_time = int(music_slider.get()) + 1
+                    music_slider.config(value=next_time)
 
+                # Actualiser le temps au bout d'une seconde
+                status_bar.after(1000, play_time) 
+            
         # Zone haute de la fenêtre contenant les boutons de l'interface
         top_buttons = Frame(self.window, bg="green")
         top_buttons.grid(padx=(10,10),pady=(20,20),row=0, column=0)
@@ -109,41 +157,13 @@ class PlayerLayout (Frame):
         slider_zone.grid(row=5, column=0,padx=1, pady=1)
         music_slider = ttk.Scale(slider_zone, from_=0, to=100, orient=HORIZONTAL, value=0, length=400)
         music_slider.pack(side=LEFT, padx=50)
-
+        # Information du timer
+        status_bar = Label(slider_zone, text='TIMER HERE', bd=1, bg='white', fg='black')
+        status_bar.pack(side=LEFT) 
         
-        status_zone = Frame(self.window,width=900, height=10, bg='white')
-        status_zone.grid(row=6, column=0,padx=1, pady=1)
-        status_bar = Label(status_zone, text='TIMER HERE', bd=1, bg='red', relief=GROOVE, anchor=E)
-        status_bar.pack(fill=X, side=BOTTOM, ipady=2) 
-        
-        def play_time():
-            current_time = mixer.music.get_pos() / 1000  
-            converted_current_time = time.strftime('%M:%S', time.gmtime(current_time))
-            
-            song = music_space.get(ACTIVE)
-            current_song = library.find_music_by_name(song)
-            song = LIBRARY_PATH + "\\" + song + ".mp3"
-            song_length = current_song.get_duration()
-            converted_song_length = time.strftime('%M:%S', time.gmtime(song_length))
-            current_time +=1
-            if int(music_slider.get() == int(song_length)):
-                status_bar.config(text=f'Temps écoulé : {converted_song_length} ')
-            elif int(music_slider.get()) == int(current_time):
-                slider_position = int(song_length)
-                music_slider.config(to=slider_position, value=int(current_time))
-            else:
-                slider_position = int(song_length)
-                music_slider.config(to=slider_position, value=int(music_slider.get()))
-                converted_current_time = time.strftime('%M:%S', time.gmtime(int(music_slider.get())))
-                status_bar.config(text=f'Temps écoulé : {converted_current_time}  sur  {converted_song_length} ')
-                next_time = int(music_slider.get()) + 1
-                music_slider.config(value=next_time)
-
-            #status_bar.config(text=f'Temps écoulé : {converted_current_time}  sur  {converted_song_length} ')
-            #music_slider.config(value=int(current_time))
-            status_bar.after(1000, play_time) 
-            
+        # On lance le chrono du slider 
         play_time()
+        
     # Destruction de la fenêtre   
     def clear(self):
         self.destroy()
