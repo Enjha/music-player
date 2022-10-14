@@ -1,3 +1,4 @@
+from hashlib import new
 import os 
 import shutil
 import fnmatch
@@ -35,6 +36,7 @@ class Library (object):
                 music_list.append(music)
         self.music_list = music_list
 
+    # Initialise la liste des playlists
     def init_playlists_list(self):
         dir_list = os.listdir(PLAYLISTS_PATH)
         for file in dir_list:
@@ -49,7 +51,7 @@ class Library (object):
     # Getter pour la musique actuellement en écoute. 
     def get_current_music(self):
         return self.current_music
-    #Setter pour définir la nouvelle musique jouée
+    # Setter pour définir la nouvelle musique jouée
     def set_current_music(self, music):
         self.current_music = music
 
@@ -122,6 +124,7 @@ class Library (object):
         pause_button["text"]= "⏸"
         mixer.music.load(LIBRARY_PATH + "\\" + song_name + ".mp3")
         mixer.music.play()
+        #play_time()
 
     # Méthode permettant de jouer la musique précédente
     def prev_music(self, music_space, space, pause_button):

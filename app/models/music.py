@@ -8,8 +8,8 @@ class Music (object):
     global LIBRARY_PATH
     LIBRARY_PATH = "ressources\songs"
 
-    title = "" # titre de la musiques
-    duration = 0 # durée de la musiques
+    title = "" # titre de la musique
+    duration = 0 # durée de la musique
     
     # Constructeur
     def __init__(self, title, duration, library):
@@ -24,7 +24,7 @@ class Music (object):
     def get_duration(self):
         return self.duration
 
-    # Méthode équals classique
+    # Méthode utilitaire équals classique
     def equals(self, music):
         if self.title == music.get_title() and self.duration == music.get_duration():
             return True

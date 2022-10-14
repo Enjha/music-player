@@ -16,7 +16,7 @@ class Playlist (object):
         self.title = title
         self.music_list = music_list
 
-    # Initialise les liste de musiques et de playlists en allant chercher directemment dans les fichiers/dossiers.
+    # Initialise les listes de musiques et de playlists en allant chercher directemment dans les fichiers/dossiers.
     def init_music_list(self):
         file = open(PLAYLIST_PATH+"\\"+self.title+".txt", "r")
         line = file.readline()
