@@ -3,12 +3,13 @@ import os
 import shutil
 import fnmatch
 
+from pygame import *
+from mutagen.mp3 import MP3 
 from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
-from pygame import mixer
-from mutagen.mp3 import MP3
 from app.models.music import Music
+
 
 
 # Classe permettant la gestion des musiques dans la librairie
