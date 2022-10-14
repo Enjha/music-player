@@ -9,23 +9,23 @@ class LibraryLayout :
         self.window = window
         self.library = library
         self.player_layout = player_layout
-    #Affiche le layout de la librairie
+    # Affiche le layout de la librairie
     def show(self):
         font_text_button = font.Font(size=15, family=('Sans Serif'))
-        #ListeBox
+        # Espace afficahnt les musiques
         music_list = self.library.get_music_list()
 
-        #sAffiche les playlist lors d'un click
+        # Affiche les playlist lors d'un click
         def on_click_playlist():
             musics_frame.destroy()
             top_buttons.destroy()
             PlaylistsLayout(self.window, self.library, self).show()
 
-        #Permet de lever l'event quand on clique sur une musique
+        # Permet de lever l'event quand on clique sur une musique
         def on_click_music(event):
             supp_button.place(anchor = 'e', height= 40, width=210, x=self.window.winfo_height()+150,y=40)
 
-        #Lorsqu'on double click sur une musique
+        # Lorsqu'on double click sur une musique
         def on_double_click_music(event):
             music_clicked = self.library.find_music_by_name(music_space.get("anchor"))
             #On la joue et la déclare comme la musique courante
@@ -34,7 +34,7 @@ class LibraryLayout :
             if(len(self.window.children) <= 2):
                 self.player_layout.show()  
                 
-        #Paquer les boutons   
+        # Paquer les boutons   
         top_buttons = Frame(self.window, width=self.window.winfo_width(), height=80, bg="#141414")
         top_buttons.pack(side=TOP)
         # Boutons permettant l'import, la suppression, et aller aux playlists
@@ -56,7 +56,7 @@ class LibraryLayout :
         music_space = Listbox(musics_frame, fg="white",width=70,height=17, bg="#202020",font=('helvetica',18), selectbackground="#4b4b4b", relief=FLAT, selectforeground="white", highlightthickness=0, activestyle=NONE)
         music_space.pack(padx=10, pady=10)
         
-        #Initialise la liste des musiques sur l'affichage
+        # Initialise la liste des musiques sur l'affichage
         for music in music_list: 
             music_space.insert('end', music.get_title()) 
             

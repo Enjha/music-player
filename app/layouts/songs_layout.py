@@ -16,6 +16,7 @@ class SongsLayout :
     #Affiche les musiques dans les playlists.
     def show(self):
 
+        # Déclenchée lors d'un évènement activé avec un double clic
         def on_double_click_music(event):
             music_clicked = self.library.find_music_by_name(music_space.get("anchor"))
             self.library.set_current_music(music_clicked)
@@ -23,25 +24,26 @@ class SongsLayout :
             if(len(self.window.children) <= 2):
                 self.player_layout.show()  
         
-        #Fait apparaitre le boutons supprimer quand on clique sur une musique 
+        # Fait apparaitre le boutons supprimer quand on clique sur une musique 
         def on_click_music(event):
             supp_button.place(anchor = 'e', height= 40, width=210, x=self.window.winfo_height()+150,y=40)
 
-        #Permet de retourner à la liste des playlists
+        # Permet de retourner à la liste des playlists
         def back_to_playlists():
             top_buttons.destroy()
             musics_frame.destroy()
             self.playlists_layout.show()
 
-        #Nous n'avons pas eu le temps...
+        # Nous n'avons pas eu le temps...
         def add_music():
             pass   
 
-        #Permet de supprimer une musique de la playlist uniquement. 
+        # Permet de supprimer une musique de la playlist uniquement. 
         def remove_music():
             self.playlist.remove_music_by_index(music_space.curselection()[0]) 
             music_space.delete(music_space.curselection()[0])
 
+        # Interface ui similaire à celle de la main window :
         font_text_button = font.Font(size=15, family=('Sans Serif'))
         music_list = self.library.get_music_list()
 
@@ -69,7 +71,7 @@ class SongsLayout :
         
         music_space.delete(0,END)
         
-        #Permet d'afficher les musiques 
+        # Permet d'afficher les musiques 
         self.playlist.init_music_list()
         for music in self.playlist.get_music_list(): 
             music_space.insert('end', music.get_title()) 
@@ -77,7 +79,7 @@ class SongsLayout :
         music_space.bind("<Double-Button>", on_double_click_music)
         music_space.bind("<Button>", on_click_music)
 
-        #Méthode permettant de savoir quand une musique est terminée afin de lancer la suivante.
+        # Méthode permettant de savoir quand une musique est terminée afin de lancer la suivante.
         def check_event():
             for event in pygame.event.get():
                 if event.type == MUSIC_END:
@@ -89,5 +91,6 @@ class SongsLayout :
 
         check_event()
 
+    # Destruction de la fenêtre
     def clear(self):
         self.destroy()

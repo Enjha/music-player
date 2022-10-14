@@ -38,6 +38,7 @@ class Library (object):
                 music_list.append(music)
         self.music_list = music_list
 
+    # Initialise la liste des playlists en fonctions des fichiers
     def init_playlists_list(self):
         dir_list = os.listdir(PLAYLISTS_PATH)
         for file in dir_list:
@@ -56,6 +57,7 @@ class Library (object):
     def set_current_music(self, music):
         self.current_music = music
 
+    # Obtenir la musique suivante à la courante
     def get_next_music(self, music):
         size = len(self.music_list)
         for i in range(size):
@@ -65,6 +67,7 @@ class Library (object):
                 else:
                     return self.music_list[0]   
 
+    # Obtenir la musique précédente à la courante
     def get_previous_music(self, music):
         size = len(self.music_list)
         for i in range(size):
@@ -74,6 +77,7 @@ class Library (object):
                 else:
                     return self.music_list[size-1] 
 
+    # Ajouter et supprimer une playlist à la liste des playlists
     def add_playlist(self, playlist):
         self.playlist_list.append(playlist)
 
@@ -87,7 +91,7 @@ class Library (object):
                 return True
         return False
 
-    # Fonction utile.
+    # Créer un objet Music en récupérant son temps
     def create_music_by_name(self, name):
         audio = MP3(LIBRARY_PATH+"\\"+name)
         audio_info = audio.info
@@ -95,16 +99,16 @@ class Library (object):
         music = Music(name.replace(".mp3", "") , duration, self)
         return music
 
-    # Methode d'import de fichier mp3.
+    # Methode d'import de fichier en .mp3
     def import_music(self, music_space):
-        # Ouvrir la fenêtre de dialogue pour importer des fichier .mp3
+        # Ouvrir la fenêtre de dialogue pour importer des fichiers .mp3
         songs=filedialog.askopenfilenames(initialdir="songs/",title="Importer fichier audio", filetypes=(("mp3 Files","*.mp3"),))
         # Parcourir la selection
         for song in songs:
             # Recupérer le nom de la musique dans le chemin
             song_split = song.split("/")
             song_rename = song_split[len(song_split)-1]
-            # Si elle a déjà été importé : Empêcher le re-import et afficher une popin
+            # Si elle a déjà été importé alors empêcher le re-import et afficher une pop-in
             if(os.path.exists(LIBRARY_PATH+"/"+ song_rename)):
                 messagebox.showinfo("Information", song_rename+" a déjà été importé",icon='warning')
             # Si non, on l'ajoute à l'interface et dans le dossier
@@ -121,11 +125,11 @@ class Library (object):
         if(os.path.exists(LIBRARY_PATH+"/"+ name)):
             result = messagebox.askquestion("Confirmation", "Voulez-vous supprimer "+name+" ?", icon='warning')
             if result == 'yes':
-                #Suppression de la musique sur l'affichage
+                # Suppression de la musique sur l'affichage
                 music_space.delete("anchor")
-                #Suppression de la musique dans le dossier songs
+                # Suppression de la musique dans le dossier songs
                 os.remove(LIBRARY_PATH+"/"+ name)
-                #Suppression de la musique dans la liste des musiques de l'objet
+                # Suppression de la musique dans la liste des musiques de l'objet
                 for music in self.get_music_list():
                     if(music.get_title() == name):
                         self.get_playlist_list().remove(music)         
@@ -138,7 +142,7 @@ class Library (object):
 
     # Méthode permettant de jouer une musique
     def play_music(self, music_clicked):
-        #Charger la musique et la jouer. 
+        # Charger la musique et la jouer 
         self.set_current_music(music_clicked)
         mixer.music.load(LIBRARY_PATH + "\\" + music_clicked.get_title() + ".mp3")
         mixer.music.play()
