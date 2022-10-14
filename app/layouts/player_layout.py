@@ -1,11 +1,11 @@
-from curses import window
-from lib2to3.pytree import convert
 from tkinter import *
 from tkinter import font
 import tkinter.ttk as ttk
 from app.models.library import *
 from app.models.music import *
+
 import time
+
 class PlayerLayout (Frame): 
 
     window = ()
@@ -44,64 +44,8 @@ class PlayerLayout (Frame):
             stop_button.pack(in_=buttons, side=LEFT)
             play_button["text"] = "🔁"
             play_button.pack(padx=8, pady=15,in_=buttons, side=LEFT)
-        
-        def play_time():
-            current_time = pygame.mixer.music.get_pos() / 1000
-            current_time =0 #
-            
-            slider_label.config(text=f'Slider : {int(music_slider.get())} et position: {int(current_time)}')
-            converted_current_time = time.strftime('%M:%S', time.gmtime(current_time))
-            
-            song = music_space.get(ACTIVE)
-            song = LIBRARY_PATH + "\\" + song + ".mp3"
-            audio = MP3(song)
-            audio_info = audio.info
-            global song_length
-            song_length = int(audio_info.length)
-            converted_song_length = time.strftime('%M:%S', time.gmtime(song_length))
-            
-            current_time +=1
-            
-            if int(music_slider.get() == int(song_length)):
-                status_bar.config(text=f'Temps écoulé : {converted_song_length} ')
-            elif int(music_slider.get()) == int(current_time):
-                slider_position = int(song_length)
-                music_slider.config(to=slider_position, value=int(current_time))
-            else:
-                slider_position = int(song_length)
-                music_slider.config(to=slider_position, value=int(music_slider.get()))
-                converted_current_time = time.strftime('%M:%S', time.gmtime(int(music_slider.get())))
-                status_bar.config(text=f'Temps écoulé : {converted_current_time}  sur  {converted_song_length} ')
-                next_time = int(music_slider.get()) + 1
-                music_slider.config(value=next_time)
-            
-            #status_bar.config(text=f'Temps écoulé : {converted_current_time}  sur  {converted_song_length} ')
-            #music_slider.config(value=int(current_time))
-            status_bar.after(1000, play_time) 
-            
-        def slide(x):
-            slider_label.config(text=f'{int(music_slider.get())}  de {song_length}')
+    
 
-        # Méthode permettant de jouer une musique
-        def play_music():
-            music_title.config(text=music_space.get("anchor"))
-            if (music_space.get("anchor") != ""):
-                music_title.config(text=music_space.get("anchor"))
-                song_name = music_space.get("anchor")
-            else:
-                # Si rien n'est sélectionné, joue la premiere musique
-                music_space.select_set(0)
-                music_title.config(text=music_space.get(0))
-                song_name = music_space.get(0)
-            # Charger la musique et la jouer. 
-            pause_button["text"]= "⏸"
-            mixer.music.load(LIBRARY_PATH + "\\" + song_name + ".mp3")
-            mixer.music.play()
-            
-            play_time()
-            #slider_position = song_length
-            #music_slider.config(to=slider_position, value=0)
-        
         # Zone haute de la fenêtre contenant les boutons de l'interface
         top_buttons = Frame(self.window, bg="green")
         top_buttons.grid(padx=(10,10),pady=(20,20),row=0, column=0)
@@ -148,7 +92,7 @@ class PlayerLayout (Frame):
         stop_button.pack(padx=8, pady=15, in_=buttons,side=RIGHT)
         stop_button['font'] = font_text_button  
         # Bouton jouer
-        play_button = Button(self.window, text="▶️", bg='#141414', fg='white',borderwidth=0, command=play_music) #command=lambda : library.play_music(music_space, music_title))
+        play_button = Button(self.window, text="▶️", bg='#141414', fg='white',borderwidth=0, command=lambda : library.play_music(music_space, music_title, pause_button))
         play_button.pack(padx=8, pady=15, in_=buttons, side=LEFT)
         play_button['font'] = font_text_button  
         # Bouton pause
@@ -163,16 +107,43 @@ class PlayerLayout (Frame):
         # Affichage d'un slider pour la musique en cours de lecture
         slider_zone = Frame(self.window, width=900, height=20, bg="#141414")
         slider_zone.grid(row=5, column=0,padx=1, pady=1)
-        music_slider = ttk.Scale(slider_zone, from_=0, to=100, orient=HORIZONTAL, value=0, length=400, command=slide)
+        music_slider = ttk.Scale(slider_zone, from_=0, to=100, orient=HORIZONTAL, value=0, length=400)
         music_slider.pack(side=LEFT, padx=50)
-        slider_label = Label(slider_zone, text="0")
-        slider_label.pack()
+
         
         status_zone = Frame(self.window,width=900, height=10, bg='white')
         status_zone.grid(row=6, column=0,padx=1, pady=1)
         status_bar = Label(status_zone, text='TIMER HERE', bd=1, bg='red', relief=GROOVE, anchor=E)
-        status_bar.pack(fill=X, side=BOTTOM, ipady=2)
+        status_bar.pack(fill=X, side=BOTTOM, ipady=2) 
         
+        def play_time():
+            current_time = mixer.music.get_pos() / 1000  
+            converted_current_time = time.strftime('%M:%S', time.gmtime(current_time))
+            
+            song = music_space.get(ACTIVE)
+            current_song = library.find_music_by_name(song)
+            song = LIBRARY_PATH + "\\" + song + ".mp3"
+            song_length = current_song.get_duration()
+            converted_song_length = time.strftime('%M:%S', time.gmtime(song_length))
+            current_time +=1
+            if int(music_slider.get() == int(song_length)):
+                status_bar.config(text=f'Temps écoulé : {converted_song_length} ')
+            elif int(music_slider.get()) == int(current_time):
+                slider_position = int(song_length)
+                music_slider.config(to=slider_position, value=int(current_time))
+            else:
+                slider_position = int(song_length)
+                music_slider.config(to=slider_position, value=int(music_slider.get()))
+                converted_current_time = time.strftime('%M:%S', time.gmtime(int(music_slider.get())))
+                status_bar.config(text=f'Temps écoulé : {converted_current_time}  sur  {converted_song_length} ')
+                next_time = int(music_slider.get()) + 1
+                music_slider.config(value=next_time)
+
+            #status_bar.config(text=f'Temps écoulé : {converted_current_time}  sur  {converted_song_length} ')
+            #music_slider.config(value=int(current_time))
+            status_bar.after(1000, play_time) 
+            
+        play_time()
     # Destruction de la fenêtre   
     def clear(self):
         self.destroy()

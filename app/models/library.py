@@ -1,15 +1,14 @@
-from hashlib import new
 import os 
 import shutil
 import fnmatch
 import ctypes
+
 
 from tkinter import *
 from tkinter import filedialog
 from app.models.music import Music
 from mutagen.mp3 import MP3
 from pygame import mixer
-
 # Classe permettant la gestion des musiques dans la librairie
 class Library (object):
  
@@ -124,7 +123,6 @@ class Library (object):
         pause_button["text"]= "⏸"
         mixer.music.load(LIBRARY_PATH + "\\" + song_name + ".mp3")
         mixer.music.play()
-        #play_time()
 
     # Méthode permettant de jouer la musique précédente
     def prev_music(self, music_space, space, pause_button):
@@ -182,3 +180,4 @@ class Library (object):
         for music in self.get_music_list():
             if(music.get_title() == name):
                 return music
+
