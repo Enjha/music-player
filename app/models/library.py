@@ -90,11 +90,10 @@ class Library (object):
                 music_space.insert(END,music.get_title())
     
     # Méthode de suppression d'une musique présente dans la librairie  
-    def delete_music(self, music_space, space, pause_button): 
+    def delete_music(self, music_space): 
         name=music_space.get("anchor")+".mp3"
         if(os.path.exists(LIBRARY_PATH+"/"+ name)):
             #Suppression de la musique sur l'affichage
-            self.next_music(music_space, space, pause_button)
             music_space.delete("anchor")
             #Suppression de la musique dans le dossier songs
             os.remove(LIBRARY_PATH+"/"+ name)
