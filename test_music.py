@@ -7,13 +7,12 @@ from app.models.music import Music
 
 class MyTestCase(unittest.TestCase):
     def test_music(self):
-        audio = MP3("Demon Slayer - Kimetsu no Yaiba.mp3")
+        audio = MP3("ressources/song_test/Demon Slayer - Kimetsu no Yaiba.mp3")
         library = Library()
         audio_info = audio.info
         duration = int(audio_info.length)
-        music = Music("Demon Slayer - Kimetsu no Yaiba.mp3".replace(".mp3", "").replace("tests/ressources/songs/", ""), duration, library)
+        music = Music("ressources/song_test/Demon Slayer - Kimetsu no Yaiba.mp3".replace(".mp3", "").replace("ressources/song_test/", ""), duration, library)
         assert music.get_title() == "Demon Slayer - Kimetsu no Yaiba"
-
         assert music.get_duration() == duration
 
 

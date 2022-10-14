@@ -3,11 +3,12 @@ import os
 import shutil
 import fnmatch
 import ctypes
+from mutagen.mp3 import MP3
+
 
 from tkinter import *
 from tkinter import filedialog
 from app.models.music import Music
-from mutagen.mp3 import MP3
 from pygame import mixer
 
 # Classe permettant la gestion des musiques dans la librairie

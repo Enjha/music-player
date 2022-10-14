@@ -2,12 +2,13 @@ import unittest
 from tkinter import *
 import shutil
 
+from mutagen.mp3 import MP3
+
+
 from app.models.library import Library
 from app.models.music import Music
 
 LIBRARY_PATH = "ressources/songs"
-
-
 
 library = Library()
 music_list = library.get_music_list()
@@ -18,7 +19,6 @@ music_space = Listbox(window, fg="black", bg="grey", width=100, font=('helvetica
 music_space.pack(padx=18, pady=18)
 for music in music_list:
     music_space.insert('end', music.get_title())
-
 
 class MyTestCase(unittest.TestCase):
     def test_a_init_music_list(self):
@@ -58,11 +58,6 @@ class MyTestCase(unittest.TestCase):
         library = Library()
         assert  len(music_list) == 3
         assert library.is_music_exist("Demon Slayer - Kimetsu no Yaiba")
-
-
-
-    
-        
 
 if __name__ == '__main__':
     unittest.main()

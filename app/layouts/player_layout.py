@@ -2,8 +2,8 @@ import pygame
 
 from tkinter import *
 import tkinter.font as font
-from app.models.library import *
-from app.models.music import *
+from ..models.library import *
+from ..models.music import *
 
 class Player: 
     def main_window():
