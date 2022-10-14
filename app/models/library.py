@@ -9,8 +9,9 @@ from tkinter import *
 from tkinter import filedialog
 from tkinter import messagebox
 from app.models.music import Music
-
-
+from app.models.playlist import Playlist
+from mutagen.mp3 import MP3
+from pygame import mixer
 
 # Classe permettant la gestion des musiques dans la librairie
 class Library (object):
@@ -29,6 +30,7 @@ class Library (object):
     # Constructeur
     def __init__(self):
         self.init_music_list()
+        self.init_playlists_list()
     
     # Initialise les liste de musiques et de playlists en allant chercher directemment dans les fichiers/dossiers.
     def init_music_list(self):
@@ -43,7 +45,7 @@ class Library (object):
     def init_playlists_list(self):
         dir_list = os.listdir(PLAYLISTS_PATH)
         for file in dir_list:
-            self.playlist_list.append(file)
+            self.playlist_list.append(Playlist(file.replace(".txt", ""), self))
 
     # Getter pour les liste de musiques et de playlists.
     def get_music_list(self):
@@ -76,6 +78,12 @@ class Library (object):
                 else:
                     return self.music_list[size-1] 
 
+    def add_playlist(self, playlist):
+        self.playlist_list.append(playlist)
+
+    def remove_playlist(self, playlist):
+        self.playlist_list.remove(playlist)   
+
     # Vérifie que le titre de la musique est présente dans la librairie.
     def is_music_exist(self, name):
         for music in self.music_list:
@@ -103,17 +111,18 @@ class Library (object):
             song_rename = song_split[len(song_split)-1]
             # Si elle a déjà été importé : Empêcher le re-import et afficher une popin
             if(os.path.exists(LIBRARY_PATH+"/"+ song_rename)):
-                messagebox.showinfo(song_rename+" a déjà été importé",icon='warning')
+                messagebox.showinfo("Information", song_rename+" a déjà été importé",icon='warning')
             # Si non, on l'ajoute à l'interface et dans le dossier
             else:
                 shutil.copy(song, LIBRARY_PATH)    
                 music = self.create_music_by_name(song_rename)
-                music_list.append(song_rename.replace(".mp3",""))
+                self.music_list.append(music)
                 music_space.insert(END,music.get_title())
     
     # Méthode de suppression d'une musique présente dans la librairie  
     def delete_music(self, music_space): 
         name=music_space.get("anchor")+".mp3"
+        name_music_test = music_space.get("anchor")
         if(os.path.exists(LIBRARY_PATH+"/"+ name)):
             result = messagebox.askquestion("Confirmation", "Voulez-vous supprimer "+name+" ?", icon='warning')
             if result == 'yes':
@@ -149,3 +158,9 @@ class Library (object):
         for music in self.get_music_list():
             if(music.get_title() == name):
                 return music
+
+    # Renvoie une playlist grâce au nom
+    def find_playlist_by_title(self, title):
+        for playlist in self.get_playlist_list():
+            if(playlist.get_title() == title):
+                return playlist            

@@ -1,23 +1,23 @@
-import tkinter as tk
+from tkinter import *
 from tkinter import font
 from app.layouts.playlists_layout import *
-from app.layouts.player_layout import *
-import ctypes
 
 class LibraryLayout : 
 
     # Constructeur
-    def __init__(self, window, library):
+    def __init__(self, window, library, player_layout):
         self.window = window
         self.library = library
+        self.player_layout = player_layout
 
     def show(self):
-        font_text_button = font.Font(size=15, family=('Sans Serif'))
+        font_text_button = font.Font(size=15, family="Sans Serif")
         music_list = self.library.get_music_list()
        
         def on_click_playlist():
-            self.clear()
-            PlaylistLayout(self.library).show()
+            musics_frame.destroy()
+            top_buttons.destroy()
+            PlaylistsLayout(self.window, self.library, self).show()
 
         def on_click_music(event):
             supp_button.place(anchor = 'e', height= 40, width=210, x=self.window.winfo_height()+150,y=40)
@@ -26,10 +26,8 @@ class LibraryLayout :
             music_clicked = self.library.find_music_by_name(music_space.get("anchor"))
             self.library.set_current_music(music_clicked)
             self.library.play_music(music_clicked)
-            retrieve_player()
-
-        def retrieve_player(): 
-            PlayerLayout(self.window, self.library).show() 
+            if(len(self.window.children) <= 2):
+                self.player_layout.show()  
             
         top_buttons = Frame(self.window, width=self.window.winfo_width(), height=80, bg="#141414")
         top_buttons.pack(side=TOP)
@@ -59,5 +57,8 @@ class LibraryLayout :
         music_space.bind("<Button>", on_click_music)
         
         
+    def get_player_layout(self):
+        return self.player_layout
+
     def clear(self):
         self.destroy()

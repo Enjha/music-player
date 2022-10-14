@@ -1,5 +1,5 @@
-import os 
-from app.models.library import Library
+import os
+from tkinter import messagebox
 
 # Modèle playlist représentant une playlist
 class Playlist (object):
@@ -12,11 +12,13 @@ class Playlist (object):
     music_list = []     # Liste des musiques de la playlist
 
     # Constructeur
-    def __init__(self, title):
+    def __init__(self, title, library):
         self.title = title
+        self.library = library
 
     # Initialise les liste de musiques et de playlists en allant chercher directemment dans les fichiers/dossiers.
     def init_music_list(self):
+        self.music_list = []
         file = open(PLAYLIST_PATH+"\\"+self.title+".txt", "r")
         line = file.readline()
         while line:
@@ -47,23 +49,23 @@ class Playlist (object):
     # Supprimer une playlist 
     def delete(self):
         if os.path.isfile(PLAYLIST_PATH+"\\"+self.title+".txt"):
-            os.remove(PLAYLIST_PATH+"\\"+self.title+".txt")
-            title = self.title
-            print ("La playlist "+title+" a été supprimée.")
-            return True
+            result = messagebox.askquestion("Confirmation", "Voulez-vous supprimer la playlist "+self.title+" ?", icon='warning')
+            if result == 'yes':
+                os.remove(PLAYLIST_PATH+"\\"+self.title+".txt")
+                print ("La playlist "+self.title+" a été supprimée.")
+                return True
+            else:
+                return False    
         else:
             print(self.title+" n'existe pas.")
             return False
     
     # Ajouter une musique a la playlist
     def add_music(self, music):
-        library = Library()
-        print(self.title)
         if not os.path.isfile(PLAYLIST_PATH+"\\"+self.title+".txt"):
             print(self.title+" n'éxiste pas.")
         else:
-            print(music.get_title())
-            if library.is_music_exist(music.get_title()):
+            if self.library.is_music_exist(music.get_title()):
                 playlist_file = open(PLAYLIST_PATH+"\\"+self.title+".txt",'a')
                 playlist_file.write(music.get_title()+'\n')
                 playlist_file.close()
@@ -84,7 +86,8 @@ class Playlist (object):
                         for line in lines:
                             if line == music.get_title():
                                 music_name = line
-                                fw.write(line)
+                                fw.write("")
+                self.music_list.remove(music)                
                 print(music_name+" a été retirée.")
             except:
                 print("Oops! something error")
@@ -97,20 +100,21 @@ class Playlist (object):
             try:
                 with open(PLAYLIST_PATH+"\\"+self.title+".txt", 'r') as fr:
                     lines = fr.readlines()
-                    ptr = 1
+                    ptr = 0
                     with open(PLAYLIST_PATH+"\\"+self.title+".txt", 'w') as fw:
                         for line in lines:
                             if ptr != index:
                                 music_name = line
                                 fw.write(line)
+                            ptr += 1              
+                self.music_list.pop(index)          
                 print(music_name+" a été retirée.")
             except:
                 print("Oops! something error")
 
     # Retrouver une musique dans la librairie avec son titre
     def find_music_by_name(self, name):
-        library = Library()
-        music_list_library = library.get_music_list()
+        music_list_library = self.library.get_music_list()
         for music in music_list_library:
             if(music.get_title() == name):
                 return music
