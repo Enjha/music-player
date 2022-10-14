@@ -14,15 +14,17 @@ class PlaylistsLayout :
         self.library_layout = library_layout
 
     def show(self):
+        #Fait apparaitre le boutons supprimer quand on clique sur une musique 
         def on_click_playlist(event):
             supp_button.place(anchor = 'e', height= 40, width=210, x=self.window.winfo_height()+150,y=40)
-
+        
         def on_double_click_playlist(event):
             playlist = self.library.find_playlist_by_title(playlist_space.get("anchor"))
             top_buttons.destroy()
             playlist_frame.destroy()
             SongsLayout(self.window, self.library, self.library_layout, self, self.library_layout.get_player_layout(), playlist).show()
 
+        #Permet d'ajouter une playlist en entrant un nom. (Fait apparaitre une popin)
         def add_playlist_by_name():
             popup = Tk()
             pygame.mixer.init()
@@ -51,15 +53,18 @@ class PlaylistsLayout :
 
             popup.mainloop()
 
+        #Permet de retourner à la librarie
         def back_to_library():
             top_buttons.destroy()
             playlist_frame.destroy()
             self.library_layout.show()
 
+        #Initialise la liste de playlist pour l'affichage
         def init_playlists():
             for playlist in playlist_list: 
                 playlist_space.insert('end', playlist.get_title().replace('.txt',''))     
 
+        #Permet de supprimer des playlists
         def delete_playlist():
             playlist_title = playlist_space.get("anchor")
             playlist = self.library.find_playlist_by_title(playlist_title)
@@ -67,6 +72,8 @@ class PlaylistsLayout :
                 self.library.remove_playlist(playlist)
                 playlist_space.delete("anchor")
 
+
+        #Différents boutons permettant la suppression et la navigation sur l'application.
         font_text_button = font.Font(size=15, family=('Sans Serif'))
         playlist_list = self.library.get_playlist_list()
 

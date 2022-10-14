@@ -13,6 +13,7 @@ class SongsLayout :
         self.player_layout = player_layout
         self.playlist = playlist
 
+    #Affiche les musiques dans les playlists.
     def show(self):
 
         def on_double_click_music(event):
@@ -21,18 +22,22 @@ class SongsLayout :
             self.library.play_music(music_clicked)
             if(len(self.window.children) <= 2):
                 self.player_layout.show()  
-
+        
+        #Fait apparaitre le boutons supprimer quand on clique sur une musique 
         def on_click_music(event):
             supp_button.place(anchor = 'e', height= 40, width=210, x=self.window.winfo_height()+150,y=40)
 
+        #Permet de retourner à la liste des playlists
         def back_to_playlists():
             top_buttons.destroy()
             musics_frame.destroy()
             self.playlists_layout.show()
 
+        #Nous n'avons pas eu le temps...
         def add_music():
             pass   
 
+        #Permet de supprimer une musique de la playlist uniquement. 
         def remove_music():
             self.playlist.remove_music_by_index(music_space.curselection()[0]) 
             music_space.delete(music_space.curselection()[0])
@@ -64,6 +69,7 @@ class SongsLayout :
         
         music_space.delete(0,END)
         
+        #Permet d'afficher les musiques 
         self.playlist.init_music_list()
         for music in self.playlist.get_music_list(): 
             music_space.insert('end', music.get_title()) 

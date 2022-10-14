@@ -32,7 +32,7 @@ class MyTestCase(unittest.TestCase):
         assert  len(music_list) == 7
         assert  music_list[2].get_title() == "Cry Baby- Tokyo Revengers"
         assert  music_list[6].get_title() == "You Want a Battle_ (Here's a War)"
-
+        print(music_list[1].get_title())
     #vérification de la présence d'une musique dans la librairie
     def test_b_is_music_exist_library(self):
         assert library.is_music_exist("Cry Baby- Tokyo Revengers")
@@ -101,6 +101,7 @@ class MyTestCase(unittest.TestCase):
         for line in lines:
             count += 1
         assert count == 2
+        print(count)
         assert lines[0] == 'Demon Slayer - Kimetsu no Yaiba\n'
         assert lines[1] == 'Demon Slayer - Kimetsu no Yaiba\n'
         playlist_file.close()
