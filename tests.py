@@ -146,6 +146,7 @@ class MyTestCase(unittest.TestCase):
         assert count == 0
         playlist_file.close()
 
+    #test de la suppression d'une playlist
     def test_z_delete_playlist(self):
         playlist.delete()
         assert os.path.isfile("ressources\playlists\playlist_test.txt") == False
