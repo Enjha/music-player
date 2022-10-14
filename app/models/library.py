@@ -2,14 +2,14 @@ from glob import glob
 import os 
 import shutil
 import fnmatch
-import ctypes
-from mutagen.mp3 import MP3
-
 
 from tkinter import *
 from tkinter import filedialog
-from app.models.music import Music
+from tkinter import messagebox
 from pygame import mixer
+from mutagen.mp3 import MP3
+from app.models.music import Music
+
 
 # Classe permettant la gestion des musiques dans la librairie
 class Library (object):
@@ -24,6 +24,7 @@ class Library (object):
     playlist_list = []
     music_list = []
     current_music = ()
+
     # Constructeur
     def __init__(self):
         self.init_music_list()
@@ -56,6 +57,23 @@ class Library (object):
     def set_current_music(self, music):
         self.current_music = music
 
+    def get_next_music(self, music):
+        size = len(self.music_list)
+        for i in range(size):
+            if(self.music_list[i].get_title() == music.get_title()):
+                if(i < size-1):
+                    return self.music_list[i+1]
+                else:
+                    return self.music_list[0]   
+
+    def get_previous_music(self, music):
+        size = len(self.music_list)
+        for i in range(size):
+            if(self.music_list[i].equals(music)):
+                if(i > 0):
+                    return self.music_list[i-1]
+                else:
+                    return self.music_list[size-1] 
 
     # Vérifie que le titre de la musique est présente dans la librairie.
     def is_music_exist(self, name):
@@ -84,7 +102,7 @@ class Library (object):
             song_rename = song_split[len(song_split)-1]
             # Si elle a déjà été importé : Empêcher le re-import et afficher une popin
             if(os.path.exists(LIBRARY_PATH+"/"+ song_rename)):
-                ctypes.windll.user32.MessageBoxW(0, song_rename+" a déjà été importé", "Attention", 1)
+                messagebox.showinfo(song_rename+" a déjà été importé",icon='warning')
             # Si non, on l'ajoute à l'interface et dans le dossier
             else:
                 shutil.copy(song, LIBRARY_PATH)    
@@ -96,88 +114,36 @@ class Library (object):
     def delete_music(self, music_space): 
         name=music_space.get("anchor")+".mp3"
         if(os.path.exists(LIBRARY_PATH+"/"+ name)):
-            #Suppression de la musique sur l'affichage
-            music_space.delete("anchor")
-            #Suppression de la musique dans le dossier songs
-            os.remove(LIBRARY_PATH+"/"+ name)
-            #Suppression de la musique dans la liste des musiques de l'objet
-            for music in self.get_music_list():
-                if(music.get_title() == name):
-                    self.get_playlist_list().remove(music)         
-            for playlist in self.get_playlist_list():
-                for music in playlist.music_list:
+            result = messagebox.askquestion("Confirmation", "Voulez-vous supprimer "+name+" ?", icon='warning')
+            if result == 'yes':
+                #Suppression de la musique sur l'affichage
+                music_space.delete("anchor")
+                #Suppression de la musique dans le dossier songs
+                os.remove(LIBRARY_PATH+"/"+ name)
+                #Suppression de la musique dans la liste des musiques de l'objet
+                for music in self.get_music_list():
                     if(music.get_title() == name):
-                        playlist.remove_music(playlist, name)
+                        self.get_playlist_list().remove(music)         
+                for playlist in self.get_playlist_list():
+                    for music in playlist.music_list:
+                        if(music.get_title() == name):
+                            playlist.remove_music(playlist, name)    
         else:
-            ctypes.windll.user32.MessageBoxW(0, name +" n'existe pas.", "Attention", 1)
+           messagebox.showinfo(name +" n'existe pas.", icon='warning')
 
     # Méthode permettant de jouer une musique
-    def play_music(self, music_space, space, pause_button):
-        space.config(text=music_space.get("anchor"))
-        if (music_space.get("anchor") != ""):
-            space.config(text=music_space.get("anchor"))
-            song_name =music_space.get("anchor")
-        else:
-            #Si rien n'est sélectionné, joue la premiere musique
-            music_space.select_set(0)
-            space.config(text=music_space.get(0))
-            song_name = music_space.get(0)
+    def play_music(self, music_clicked):
         #Charger la musique et la jouer. 
-        pause_button["text"]= "⏸"
-        mixer.music.load(LIBRARY_PATH + "\\" + song_name + ".mp3")
+        self.set_current_music(music_clicked)
+        mixer.music.load(LIBRARY_PATH + "\\" + music_clicked.get_title() + ".mp3")
         mixer.music.play()
-
-    # Méthode permettant de jouer la musique précédente
-    def prev_music(self, music_space, space, pause_button):
-        prev_song = music_space.curselection()
-        prev_song = prev_song[0]-1
-        prev_song_name = music_space.get(prev_song)
-        space.config(text= prev_song_name)
-        #En début de liste, lit la dernière musique
-        if (prev_song_name == ""):
-            music_space.select_set(music_space.size() - 1)
-            prev_song = music_space.size() - 1
-            prev_song_name = music_space.get(prev_song)
-        mixer.music.load(LIBRARY_PATH + "\\" + prev_song_name + ".mp3")
-        mixer.music.play()
-        music_space.select_clear(0, 'end')
-        pause_button["text"]= "⏸"
-        music_space.activate(prev_song)
-        music_space.select_set(prev_song)
-    # Méthode permettant de jouer la musique suivante
-    def next_music(self, music_space, space, pause_button):
-        next_song = music_space.curselection()
-        next_song = next_song[0]+1
-        next_song_name = music_space.get(next_song)
-        space.config(text= next_song_name)
-        # En fin de liste, lit la première musique
-        if (next_song_name == ""):
-            music_space.select_set(0)
-            next_song = 0
-            next_song_name = music_space.get(next_song)
-            space.config(text=next_song_name)
-        mixer.music.load(LIBRARY_PATH + "\\" + next_song_name + ".mp3")
-        mixer.music.play()
-        music_space.select_clear(0, 'end')
-        pause_button["text"]= "⏸"
-        music_space.activate(next_song)
-        music_space.select_set(next_song)
-
-    # Méthode permettant de mettre en pause la musique courante
-    def pause_music(self, pause_button):
-        if(pause_button["text"]== "⏸"):
-            mixer.music.pause()
-            pause_button["text"] = "▶️"
-        else:
-            mixer.music.unpause()
-            pause_button["text"]= "⏸"
 
     # Méthode permettant d'arrêter la lecture d'une quelconque musique
     def stop_music(self, music_space):
         mixer.music.stop()
         music_space.select_clear('active')
 
-
+    # Renvoie une musique grâce au nom
     def find_music_by_name(self, name):
         for music in self.get_music_list():
             if(music.get_title() == name):

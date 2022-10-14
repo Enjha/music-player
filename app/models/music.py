@@ -1,4 +1,3 @@
-
 from tkinter import *
 
 #Classe permettant la gestion des musiques lors de la lecture
@@ -29,5 +28,3 @@ class Music (object):
             return True
         else:
             return False
-
-  
