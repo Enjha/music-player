@@ -1,10 +1,9 @@
-import tkinter as tk
 from tkinter import font
 from app.layouts.playlists_layout import *
 from app.layouts.player_layout import *
-import ctypes
 
 class LibraryLayout : 
+    pygame.init()
 
     # Constructeur
     def __init__(self, window, library):

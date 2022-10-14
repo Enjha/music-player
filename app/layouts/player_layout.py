@@ -1,16 +1,14 @@
 from tkinter import *
 from tkinter import font
-from pygame import mixer
+import pygame
 
 class PlayerLayout : 
-
     # Constructeur
     def __init__(self, window, library):
         self.window = window
         self.library = library
 
     def show(self):
-
         font_text_button = font.Font(size=20, family=('Comic Sans MS'), weight=font.BOLD)
 
         label_zone = Frame(self.window, width=900, height=60, bg="#141414")
@@ -61,10 +59,10 @@ class PlayerLayout :
         
         def play_pause_music():
             if(play_pause_button["text"]== "⏸"):
-                mixer.music.pause()
+                pygame.mixer.music.pause()
                 play_pause_button["text"] = "▶️"
             else:
-                mixer.music.unpause()
+                pygame.mixer.music.unpause()
                 play_pause_button["text"]= "⏸"
 
         def retrieve_player():
@@ -74,6 +72,16 @@ class PlayerLayout :
             next_button.pack(in_=buttons, side=LEFT)
             play_pause_button["text"] = "🔁"
             play_pause_button.pack(padx=8, pady=15,in_=buttons, side=LEFT)  
-               
+        #Méthode permettant de savoir quand une musique est terminée afin de lancer la suivante.
+        def check_event():
+            for event in pygame.event.get():
+                if event.type == MUSIC_END:
+                    next_music()
+            self.window.after(100,check_event) 
+
+        MUSIC_END = pygame.USEREVENT+1
+        pygame.mixer.music.set_endevent(MUSIC_END)
+
+        check_event()
     def clear(self):
         self.destroy()
