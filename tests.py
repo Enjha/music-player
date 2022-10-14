@@ -30,7 +30,7 @@ class MyTestCase(unittest.TestCase):
     #test de l'initialisation de la librairie
     def test_a_init_music_list_library(self):
         assert  len(music_list) == 7
-        assert  music_list[1].get_title() == "Cry Baby- Tokyo Revengers"
+        assert  music_list[2].get_title() == "Cry Baby- Tokyo Revengers"
         assert  music_list[6].get_title() == "You Want a Battle_ (Here's a War)"
 
     #vérification de la présence d'une musique dans la librairie
@@ -48,7 +48,7 @@ class MyTestCase(unittest.TestCase):
     def test_d_delete_music_library(self):
         assert library.is_music_exist("Demon Slayer - Kimetsu no Yaiba")
         assert  len(music_list) == 7
-        music_space.select_anchor(2)
+        music_space.select_anchor(3)
         library.delete_music(music_space)
         library2 = Library()
         assert not library2.is_music_exist("Demon Slayer - Kimetsu no Yaiba")
