@@ -3,21 +3,21 @@ from tkinter import font
 import pygame
 
 class PlayerLayout : 
+
     # Constructeur
     def __init__(self, window, library):
         self.window = window
         self.library = library
 
     def show(self):
-        font_text_button = font.Font(size=20, family=('Comic Sans MS'), weight=font.BOLD)
 
-        label_zone = Frame(self.window, width=900, height=60, bg="#141414")
-        label_zone.pack(side=TOP)
-        music_title = Label(label_zone, text= self.library.get_current_music().get_title() ,bg='#141414', fg='white', font=('poppin',22))
-        music_title.pack()
+        font_text_button = font.Font(size=20, family=('Comic Sans MS'), weight=font.BOLD)  
         
-        player_frame = Frame(self.window, width=self.window.winfo_width(), height=40, bg="#141414")
+        player_frame = Frame(self.window, width=self.window.winfo_width(), height=60, bg="#141414")
         player_frame.pack(side=BOTTOM)
+
+        music_title = Label(player_frame, text= self.library.get_current_music().get_title() ,bg='#141414', fg='white', font=('poppin',22))
+        music_title.pack()
 
         buttons = Frame(player_frame, bg='#141414')
         buttons.pack(anchor='center') 
@@ -65,13 +65,6 @@ class PlayerLayout :
                 pygame.mixer.music.unpause()
                 play_pause_button["text"]= "⏸"
 
-        def retrieve_player():
-            player_frame.grid()   
-            prev_button.pack(in_=buttons, side=LEFT)
-            play_pause_button.pack(in_=buttons,side=LEFT)
-            next_button.pack(in_=buttons, side=LEFT)
-            play_pause_button["text"] = "🔁"
-            play_pause_button.pack(padx=8, pady=15,in_=buttons, side=LEFT)  
         #Méthode permettant de savoir quand une musique est terminée afin de lancer la suivante.
         def check_event():
             for event in pygame.event.get():
@@ -83,5 +76,6 @@ class PlayerLayout :
         pygame.mixer.music.set_endevent(MUSIC_END)
 
         check_event()
+        
     def clear(self):
         self.destroy()

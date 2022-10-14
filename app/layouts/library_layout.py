@@ -1,22 +1,23 @@
+from tkinter import *
 from tkinter import font
 from app.layouts.playlists_layout import *
-from app.layouts.player_layout import *
 
 class LibraryLayout : 
-    pygame.init()
 
     # Constructeur
-    def __init__(self, window, library):
+    def __init__(self, window, library, player_layout):
         self.window = window
         self.library = library
+        self.player_layout = player_layout
 
     def show(self):
         font_text_button = font.Font(size=15, family=('Sans Serif'))
         music_list = self.library.get_music_list()
        
         def on_click_playlist():
-            self.clear()
-            PlaylistLayout(self.library).show()
+            musics_frame.destroy()
+            top_buttons.destroy()
+            PlaylistsLayout(self.window, self.library, self).show()
 
         def on_click_music(event):
             supp_button.place(anchor = 'e', height= 40, width=210, x=self.window.winfo_height()+150,y=40)
@@ -25,10 +26,8 @@ class LibraryLayout :
             music_clicked = self.library.find_music_by_name(music_space.get("anchor"))
             self.library.set_current_music(music_clicked)
             self.library.play_music(music_clicked)
-            retrieve_player()
-
-        def retrieve_player(): 
-            PlayerLayout(self.window, self.library).show() 
+            if(len(self.window.children) <= 2):
+                self.player_layout.show()  
             
         top_buttons = Frame(self.window, width=self.window.winfo_width(), height=80, bg="#141414")
         top_buttons.pack(side=TOP)
@@ -48,10 +47,7 @@ class LibraryLayout :
         musics_frame = Frame(self.window, width= 900, height= 400, bg="#141414")
         musics_frame.pack(padx= (30,30) ,pady=(20,40))
         
-        scrollbar = Scrollbar(musics_frame, orient=VERTICAL)
-        music_space = Listbox(musics_frame, fg="white",width=70,height=15, bg="#2f3542",font=('helvetica',18), selectbackground="#4b4b4b", relief=FLAT, selectforeground="white", highlightthickness=0, activestyle=NONE, yscrollcommand=scrollbar.set)
-        scrollbar.config(command=music_space.yview)
-        scrollbar.pack(side=RIGHT, fill=Y)
+        music_space = Listbox(musics_frame, fg="white",width=70,height=17, bg="#202020",font=('helvetica',18), selectbackground="#4b4b4b", relief=FLAT, selectforeground="white", highlightthickness=0, activestyle=NONE)
         music_space.pack(padx=10, pady=10)
         
         for music in music_list: 
@@ -59,6 +55,10 @@ class LibraryLayout :
             
         music_space.bind("<Double-Button>", on_double_click_music)
         music_space.bind("<Button>", on_click_music)
-         
+        
+        
+    def get_player_layout(self):
+        return self.player_layout
+
     def clear(self):
         self.destroy()
