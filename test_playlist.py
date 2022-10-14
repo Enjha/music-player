@@ -19,10 +19,10 @@ class MyTestCase(unittest.TestCase):
         assert len(playlist.music_list) == 0
 
     def test_b_add_music(self):
-        audio = MP3("Demon Slayer - Kimetsu no Yaiba.mp3")
+        audio = MP3("ressources/song_test/Demon Slayer - Kimetsu no Yaiba.mp3")
         audio_info = audio.info
         duration = int(audio_info.length)
-        music = Music("Demon Slayer - Kimetsu no Yaiba.mp3".replace(".mp3", "").replace("tests/ressources/songs/", ""), duration, library)
+        music = Music("Demon Slayer - Kimetsu no Yaiba.mp3".replace(".mp3", "").replace("ressources/song_test/", ""), duration, library)
         playlist.add_music(name_playlist, music)
         playlist_file = open('ressources\playlists\playlist_test.txt', 'r')
         count = 0
@@ -32,12 +32,13 @@ class MyTestCase(unittest.TestCase):
         assert count == 1
         assert lines[0] == 'Demon Slayer - Kimetsu no Yaiba\n'
         playlist.add_music(name_playlist, music)
+        playlist_file.close()
 
     def test_c_remove_music(self):
-        audio = MP3("Demon Slayer - Kimetsu no Yaiba.mp3")
+        audio = MP3("ressources\song_test\Demon Slayer - Kimetsu no Yaiba.mp3")
         audio_info = audio.info
         duration = int(audio_info.length)
-        music = Music("Demon Slayer - Kimetsu no Yaiba.mp3".replace(".mp3", "").replace("tests/ressources/songs/", ""), duration, library)
+        music = Music("Demon Slayer - Kimetsu no Yaiba.mp3".replace(".mp3", "").replace("ressources\song_test\\", ""), duration, library)
         playlist.remove_music(name_playlist, music)
         playlist_file = open('ressources\playlists\playlist_test.txt', 'r')
         count = 0
@@ -46,6 +47,8 @@ class MyTestCase(unittest.TestCase):
             count += 1
             print("count:" + str(count))
         assert count == 0
+        playlist_file.close()
+
 
     def test_z_delete(self):
         playlist.delete("playlist_test")

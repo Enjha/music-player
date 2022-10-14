@@ -49,7 +49,7 @@ class MyTestCase(unittest.TestCase):
         library = Library()
         music_list = library.get_music_list()
         assert  len(music_list) == 2
-        song = "Demon Slayer - Kimetsu no Yaiba.mp3"
+        song = "ressources/song_test/Demon Slayer - Kimetsu no Yaiba.mp3"
         shutil.copy(song, LIBRARY_PATH)    
         song_split = song.split("/")
         song_rename = song_split[len(song_split)-1]        
